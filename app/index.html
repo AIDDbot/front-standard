@@ -6,16 +6,9 @@
     <meta name="color-scheme" content="light dark" />
     <title>AstroBookings</title>
 
-    <!-- Pico CSS — "violet" precompiled theme, zero build -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
-
-    <!-- Fonts — CDN, zero npm packages -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Audiowide&family=Roboto:wght@400;600;700;800&family=Anonymous+Pro:wght@400;700&display=swap"
-    />
+    <!-- Pico CSS + fonts — vendored locally, no CDN, works offline -->
+    <link rel="stylesheet" href="styles/vendor/pico.min.css" />
+    <link rel="stylesheet" href="styles/vendor/fonts.css" />
 
     <!-- Project theme: typography + spacing overrides on top of Pico -->
     <link rel="stylesheet" href="styles/theme.css" />

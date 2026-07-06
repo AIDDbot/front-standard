@@ -11,8 +11,8 @@ try {
 }
 
 const clientSrc = process.env.CLIENT_SRC ?? "app";
-const port = process.env.PORT ?? 3000;
-
+// 4000 by default: the API (back) owns 3000, so a missing .env must not collide with it.
+const port = process.env.PORT ?? 4000;
 
 const app = express();
 app.use(serveTsAsJs);
@@ -27,7 +27,6 @@ function handleSplatRoute(req: Request, res: Response, next: NextFunction) {
 }
 
 app.listen(port, () => console.log(`Server running on http://localhost:${port}`));
-
 
 const apiBaseUrl = process.env.API_BASE_URL ?? "http://localhost:3000";
 const apiBaseEncoded = JSON.stringify({ API_BASE_URL: apiBaseUrl });
@@ -60,4 +59,3 @@ function serveTsAsJs(req: Request, res: Response, next: NextFunction) {
   cache.set(tsPath, { mtimeMs, js });
   res.type("text/javascript").send(js);
 }
-
