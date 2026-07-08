@@ -59,4 +59,6 @@ export function createRouter(config: RouterConfig): void {
       event.intercept({ handler: async () => render(url, config) });
     });
   }
+
+  render(new URL(globalThis.location.href), config).catch(() => undefined);
 }
