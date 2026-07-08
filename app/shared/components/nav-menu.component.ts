@@ -11,7 +11,7 @@ function getInitialTheme(): "light" | "dark" {
 document.documentElement.setAttribute("data-theme", getInitialTheme());
 
 class NavMenu extends HTMLElement {
-  public connectedCallback() {
+  public connectedCallback(): void {
     this.innerHTML = `
       <header class="container">
         <nav>

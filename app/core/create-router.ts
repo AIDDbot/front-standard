@@ -13,23 +13,9 @@ export interface RouterConfig {
 
 let latestNavigationId = 0;
 
-export function createRouter(config: RouterConfig) {
-  config.outlet.tabIndex = -1; // Focus target after each navigation
-
-  if ("navigation" in globalThis) {
-    navigation.addEventListener("navigate", (event) => {
-      // Let the browser handle downloads, same-page hash jumps, and
-      // Anything it refuses to intercept (cross-origin, etc.).
-      if (!event.canIntercept || event.hashChange || event.downloadRequest !== null) {
-        return;
-      }
-
-      const url = new URL(event.destination.url);
-      event.intercept({ handler: async () => render(url, config) });
-    });
-  }
-
-  undefined;
+// Attribute names are case-insensitive: itemId -> item-id
+function toAttributeName(paramName: string): string {
+  return paramName.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`);
 }
 
 async function render(url: URL, config: RouterConfig): Promise<void> {
@@ -46,10 +32,9 @@ async function render(url: URL, config: RouterConfig): Promise<void> {
   const page = document.createElement(tag);
   for (const [name, value] of Object.entries(params)) {
     // Wildcard groups are numeric ("0") — not valid attribute names.
-    if (value === undefined || !/^[a-z]/i.test(name)) {
-      continue;
+    if (value !== undefined && /^[a-z]/i.test(name)) {
+      page.setAttribute(toAttributeName(name), value);
     }
-    page.setAttribute(toAttributeName(name), value);
   }
 
   config.outlet.replaceChildren(page);
@@ -59,7 +44,19 @@ async function render(url: URL, config: RouterConfig): Promise<void> {
   config.onNavigated?.(url);
 }
 
-// Attribute names are case-insensitive: itemId -> item-id
-function toAttributeName(paramName: string): string {
-  return paramName.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`);
+export function createRouter(config: RouterConfig): void {
+  config.outlet.tabIndex = -1; // Focus target after each navigation
+
+  if ("navigation" in globalThis) {
+    navigation.addEventListener("navigate", (event) => {
+      // Let the browser handle downloads, same-page hash jumps, and
+      // Anything it refuses to intercept (cross-origin, etc.).
+      if (!event.canIntercept || event.hashChange || event.downloadRequest !== null) {
+        return;
+      }
+
+      const url = new URL(event.destination.url);
+      event.intercept({ handler: async () => render(url, config) });
+    });
+  }
 }

@@ -4,14 +4,19 @@ Archetype with boilerplate code for a front web app with standard HTML, CSS and 
 
 ## Quick start
 
+> [!IMPORTANT]
+> this projects uses `nub` as a package manager and runner.
+
+[Nub](https://github.com/nubjs/nub) is an all-in-one toolkit powered by Node.js that modernizes the developer experience of the Node.js ecosystem. Use it instead of node, npm run, and npx (or the equivalents in your preferred package manager).
+
 ```bash
 npm install -g --ignore-scripts=false @nubjs/nub   # one-time, system-level
-nub node install 26 && nub node pin 26
+nub node install 26 && nub node pin 26 # latest Node.js 26 LTS
 nub install
 nub run dev   # starts the static client server on http://localhost:4000
 ```
 
-The client expects the API (the `back` project) on port 3000. Override with a `.env` file (see `.env.example`): `PORT` for this server, `API_BASE_URL` for the API location injected into the client.
+The client expects the API (the `back` project) on port 3000. 
 
 ---
 

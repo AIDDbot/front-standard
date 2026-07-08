@@ -4,13 +4,22 @@ interface StoreOptions {
   persist?: boolean;
 }
 
-export function createStore<T>(key: string, initial: T, options: StoreOptions = {}) {
+export interface Store<T> {
+  get: () => T;
+  set: (next: T) => void;
+  subscribe: (listener: Listener<T>) => () => void;
+}
+
+export function createStore<T>(key: string, initial: T, options: StoreOptions = {}): Store<T> {
   let value = initial;
 
   if (options.persist) {
     const stored = localStorage.getItem(key);
     if (stored !== null) {
       try {
+        // The persisted shape is only ever what a previous `set(value)` wrote for this key.
+        // There's no independent schema to validate against, so the cast can't be avoided.
+        // oxlint-disable-next-line typescript/no-unsafe-type-assertion
         value = JSON.parse(stored) as T;
       } catch {
         // Corrupt entry — keep the initial value
