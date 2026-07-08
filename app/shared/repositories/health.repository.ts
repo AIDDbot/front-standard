@@ -1,7 +1,7 @@
 import { get } from "../http-client.js";
-export type HealthStatus = {
+export interface HealthStatus {
   uptime: number;
   runs: number;
-};
+}
 
-export const getHealth = () => get<HealthStatus>("/api/health");
+export const getHealth = async () => get<HealthStatus>("/api/health");

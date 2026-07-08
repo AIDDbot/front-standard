@@ -2,14 +2,16 @@ export const tagName = "ab-nav-menu";
 
 function getInitialTheme(): "light" | "dark" {
   const stored = localStorage.getItem("theme");
-  if (stored === "light" || stored === "dark") return stored;
+  if (stored === "light" || stored === "dark") {
+    return stored;
+  }
   return matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
 }
 
 document.documentElement.setAttribute("data-theme", getInitialTheme());
 
 class NavMenu extends HTMLElement {
-  connectedCallback() {
+  public connectedCallback() {
     this.innerHTML = `
       <header class="container">
         <nav>

@@ -1,19 +1,21 @@
-import { getHealth, type HealthStatus } from "../shared/repositories/health.repository.js";
+import { type HealthStatus, getHealth } from "../shared/repositories/health.repository.js";
 import { healthStore } from "../shared/store/health.store.js";
 import "../shared/components/page-header.component.js";
 
 export const tagName = "ab-about-page";
 
 class AboutPage extends HTMLElement {
-  connectedCallback() {
+  public connectedCallback() {
     this.innerHTML = `
       <ab-page-header heading="About" subtitle="Express demo — built on web standards only."></ab-page-header>
       <p>Routing via the Navigation API, components as custom elements loaded on demand.</p>
       <p id="health-status">Loading health…</p>`;
 
     const cached = healthStore.get();
-    if (cached) this.#renderHealth(cached);
-    void this.#loadHealth();
+    if (cached) {
+      this.#renderHealth(cached);
+    }
+    undefined;
   }
 
   async #loadHealth() {
@@ -23,7 +25,9 @@ class AboutPage extends HTMLElement {
       this.#renderHealth(health);
     } catch {
       const statusEl = this.querySelector("#health-status");
-      if (statusEl) statusEl.textContent = "Health unavailable.";
+      if (statusEl) {
+        statusEl.textContent = "Health unavailable.";
+      }
     }
   }
 

@@ -3,7 +3,7 @@ import "../shared/components/page-header.component.js";
 export const tagName = "ab-item-detail-page";
 
 class ItemDetailPage extends HTMLElement {
-  connectedCallback() {
+  public connectedCallback() {
     const id = this.getAttribute("item-id") ?? "unknown";
     this.innerHTML = `
       <ab-page-header heading="Item #${id}"></ab-page-header>

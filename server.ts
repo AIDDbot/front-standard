@@ -1,18 +1,12 @@
-import type { NextFunction, Request, Response } from "express";
-import express from "express";
 import { existsSync, readFileSync, statSync } from "node:fs";
 import { stripTypeScriptTypes } from "node:module";
-import { join } from "node:path";
-
-try {
-  process.loadEnvFile();
-} catch {
-  // no .env file present — rely on env vars provided by the platform
-}
+import path from "node:path";
+import express, { type NextFunction, type Request, type Response } from "express";
 
 const clientSrc = process.env.CLIENT_SRC ?? "app";
-// 4000 by default: the API (back) owns 3000, so a missing .env must not collide with it.
-const port = process.env.PORT ?? 4000;
+const DEFAULT_FRONT_PORT = 4000;
+
+const port = process.env.PORT ?? DEFAULT_FRONT_PORT;
 
 const app = express();
 app.use(serveTsAsJs);
@@ -22,32 +16,33 @@ app.get("/", serveIndexHtml);
 app.get("*splat", handleSplatRoute);
 
 function handleSplatRoute(req: Request, res: Response, next: NextFunction) {
-  if (req.path.includes(".")) return next();
+  if (req.path.includes(".")) {
+    return next();
+  }
   serveIndexHtml(req, res);
 }
 
-app.listen(port, () => console.log(`Server running on http://localhost:${port}`));
+app.listen(port, () => {
+  process.stdout.write(`Serving client at http://localhost:${port}\n`);
+});
 
-const apiBaseUrl = process.env.API_BASE_URL ?? "http://localhost:3000";
-const apiBaseEncoded = JSON.stringify({ API_BASE_URL: apiBaseUrl });
-
-// Injects server-known config into the client as a global, read once at startup.
-const indexHtml = readFileSync(join(clientSrc, "index.html"), "utf8").replace(
-  "</head>",
-  `  <script>window.__ENV__ = ${apiBaseEncoded};</script>\n  </head>`,
-);
+const indexHtml = readFileSync(path.join(clientSrc, "index.html"), "utf8");
 function serveIndexHtml(_req: Request, res: Response) {
   res.type("html").send(indexHtml);
 }
 
 const cache = new Map<string, { mtimeMs: number; js: string }>();
 function serveTsAsJs(req: Request, res: Response, next: NextFunction) {
-  if (!req.path.endsWith(".js")) return next();
+  if (!req.path.endsWith(".js")) {
+    return next();
+  }
 
-  const tsPath = join(clientSrc, req.path.replace(/\.js$/, ".ts"));
-  // return if not found
-  if (!existsSync(tsPath)) return next();
-  const mtimeMs = statSync(tsPath).mtimeMs;
+  const tsPath = path.join(clientSrc, req.path.replace(/\.js$/u, ".ts"));
+  // Return if not found
+  if (!existsSync(tsPath)) {
+    return next();
+  }
+  const { mtimeMs } = statSync(tsPath);
 
   const cached = cache.get(tsPath);
   if (cached && cached.mtimeMs === mtimeMs) {
@@ -56,6 +51,6 @@ function serveTsAsJs(req: Request, res: Response, next: NextFunction) {
   }
 
   const js = stripTypeScriptTypes(readFileSync(tsPath, "utf8"), { mode: "strip" });
-  cache.set(tsPath, { mtimeMs, js });
+  cache.set(tsPath, { js, mtimeMs });
   res.type("text/javascript").send(js);
 }

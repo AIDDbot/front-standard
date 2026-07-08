@@ -13,9 +13,9 @@ if (location.pathname === "/" && lastRoute !== "/") {
 
 if (outlet) {
   createRouter({
-    outlet,
-    routes,
     notFound: notFoundRoute,
     onNavigated: (url) => lastRouteStore.set(url.pathname),
+    outlet,
+    routes,
   });
 }

@@ -1,7 +1,7 @@
 export interface Route {
   pattern: URLPattern;
   title: string;
-  load: () => Promise<string>; // resolves to the custom-element tag name
+  load: () => Promise<string>; // Resolves to the custom-element tag name
 }
 
 export interface RouterConfig {
@@ -14,35 +14,41 @@ export interface RouterConfig {
 let latestNavigationId = 0;
 
 export function createRouter(config: RouterConfig) {
-  config.outlet.tabIndex = -1; // focus target after each navigation
+  config.outlet.tabIndex = -1; // Focus target after each navigation
 
-  if ("navigation" in window) {
+  if ("navigation" in globalThis) {
     navigation.addEventListener("navigate", (event) => {
       // Let the browser handle downloads, same-page hash jumps, and
-      // anything it refuses to intercept (cross-origin, etc.).
-      if (!event.canIntercept || event.hashChange || event.downloadRequest !== null) return;
+      // Anything it refuses to intercept (cross-origin, etc.).
+      if (!event.canIntercept || event.hashChange || event.downloadRequest !== null) {
+        return;
+      }
 
       const url = new URL(event.destination.url);
-      event.intercept({ handler: () => render(url, config) });
+      event.intercept({ handler: async () => render(url, config) });
     });
   }
 
-  void render(new URL(location.href), config);
+  undefined;
 }
 
 async function render(url: URL, config: RouterConfig): Promise<void> {
-  const navigationId = ++latestNavigationId;
+  const navigationId = (latestNavigationId += 1);
   const route = config.routes.find((r) => r.pattern.test(url)) ?? config.notFound;
   const params = route.pattern.exec(url)?.pathname.groups ?? {};
   const tag = await route.load();
 
   // A newer navigation started while this one's component was loading — drop this one.
-  if (navigationId !== latestNavigationId) return;
+  if (navigationId !== latestNavigationId) {
+    return;
+  }
 
   const page = document.createElement(tag);
   for (const [name, value] of Object.entries(params)) {
     // Wildcard groups are numeric ("0") — not valid attribute names.
-    if (value === undefined || !/^[a-z]/i.test(name)) continue;
+    if (value === undefined || !/^[a-z]/i.test(name)) {
+      continue;
+    }
     page.setAttribute(toAttributeName(name), value);
   }
 

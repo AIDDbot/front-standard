@@ -9,7 +9,7 @@ const demoItems = [
 ];
 
 class HomePage extends HTMLElement {
-  connectedCallback() {
+  public connectedCallback() {
     const itemLinks = demoItems
       .map(({ id, name }) => `<li><a href="/items/${id}">${name}</a></li>`)
       .join("");

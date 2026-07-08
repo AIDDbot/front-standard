@@ -6,10 +6,10 @@
   "scripts": {
     "dev": "nub watch server.ts",
     "start": "nub server.ts",
-    "test": "nub --test \"app/**/*.test.ts\"",
-    "format": "oxfmt . ",
-    "lint": "oxlint --fix-dangerously --format=agent .",
-    "typecheck": "oxlint --type-aware --type-check --format=agent ."
+    "test": "nub --test **/*.test.ts",
+    "test:watch": "nub --test --watch **/*.test.ts",
+    "format": "oxfmt ",
+    "lint": "oxlint --fix --fix-suggestions -f=agent "
   },
   "dependencies": {
     "express": "^5.2.1"
@@ -17,11 +17,17 @@
   "devDependencies": {
     "@types/express": "^5.0.6",
     "@types/node": "^26.1.0",
-    "lefthook": "^2.1.9",
     "oxfmt": "^0.57.0",
     "oxlint": "^1.72.0",
     "oxlint-tsgolint": "^0.24.0",
     "typescript": "^7.0.1-rc"
+  },
+  "devEngines": {
+    "packageManager": {
+      "name": "nub",
+      "version": "^0.4.2",
+      "onFail": "warn"
+    }
   },
   "engines": {
     "node": ">=26.0.0"

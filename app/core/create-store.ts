@@ -13,7 +13,7 @@ export function createStore<T>(key: string, initial: T, options: StoreOptions = 
       try {
         value = JSON.parse(stored) as T;
       } catch {
-        // corrupt entry — keep the initial value
+        // Corrupt entry — keep the initial value
       }
     }
   }
@@ -26,8 +26,12 @@ export function createStore<T>(key: string, initial: T, options: StoreOptions = 
     },
     set(next: T): void {
       value = next;
-      if (options.persist) localStorage.setItem(key, JSON.stringify(next));
-      for (const listener of listeners) listener(next);
+      if (options.persist) {
+        localStorage.setItem(key, JSON.stringify(next));
+      }
+      for (const listener of listeners) {
+        listener(next);
+      }
     },
     subscribe(listener: Listener<T>): () => void {
       listeners.add(listener);
