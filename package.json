@@ -9,7 +9,7 @@
     "test": "nub --test **/*.test.ts",
     "test:watch": "nub --test --watch **/*.test.ts",
     "format": "oxfmt ",
-    "lint": "oxlint --fix --fix-suggestions -f=agent "
+    "lint": "oxlint --fix -f=agent "
   },
   "dependencies": {
     "express": "^5.2.1"
