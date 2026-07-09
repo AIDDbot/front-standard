@@ -16,7 +16,7 @@ class NavMenu extends HTMLElement {
       <header class="container">
         <nav>
           <ul>
-            <li><a href="/"><strong class="logo color">AstroBookings</strong></a></li>
+            <li><a href="/"><strong class="logo color">Frontend Standard</strong></a></li>
           </ul>
           <ul>
             <li><a href="/">Home</a></li>

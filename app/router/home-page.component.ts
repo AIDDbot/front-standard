@@ -15,7 +15,7 @@ class HomePage extends HTMLElement {
       .map(({ id, name }) => `<li><a href="/items/${id}">${name}</a></li>`)
       .join("");
     this.innerHTML = `
-      <ab-page-header heading="AstroBookings"></ab-page-header>
+      <ab-page-header heading="Demo Frontend Standard App"></ab-page-header>
       <p>Hello, world!</p>
       <section>
         <h2>Featured trips</h2>
