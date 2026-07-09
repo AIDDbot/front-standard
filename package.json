@@ -1,7 +1,7 @@
 {
-  "name": "astrobookings-front-standard",
+  "name": "front-standard",
   "version": "1.0.0",
-  "description": "AstroBookings web client — framework-free HTML/CSS/TS (web components + Navigation API), served by a thin Express static server.",
+  "description": "Standard web client — framework-free HTML/CSS/TS.",
   "type": "module",
   "scripts": {
     "dev": "nub watch server.ts",
