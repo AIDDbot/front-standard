@@ -1,3 +1,6 @@
+import { menuLinks } from "../../router/routes.js";
+import { appTitle } from "../global.js";
+
 export const tagName = "ab-nav-menu";
 
 function getInitialTheme(): "light" | "dark" {
@@ -10,17 +13,21 @@ function getInitialTheme(): "light" | "dark" {
 
 document.documentElement.setAttribute("data-theme", getInitialTheme());
 
+/** App nav bar. Override the title with the `title` attribute or change `appTitle` in app-title.ts. */
 class NavMenu extends HTMLElement {
   public connectedCallback(): void {
+    const title = this.getAttribute("title") ?? appTitle;
+    const menuItems = menuLinks
+      .map(({ href, label }) => `<li><a href="${href}">${label}</a></li>`)
+      .join("\n            ");
     this.innerHTML = `
       <header class="container">
         <nav>
           <ul>
-            <li><a href="/"><strong class="logo color">Frontend Standard</strong></a></li>
+            <li><a href="/"><strong class="logo color">${title}</strong></a></li>
           </ul>
           <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/about">About</a></li>
+            ${menuItems}
             <li>
               <span id="theme-toggle" aria-label="Toggle theme">
                 <span class="light">☼</span>

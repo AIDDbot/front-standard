@@ -1,12 +1,13 @@
 import "../shared/components/page-header.component.js";
+import { appTitle } from "../shared/global.js";
 
 export const tagName = "ab-home-page";
 
 const demoItems = [
-  { id: "1", name: "Prompts" },
+  { id: "1", name: "Promt" },
   { id: "2", name: "Context" },
   { id: "3", name: "Harness" },
-  { id: "4", name: "Loops" },
+  { id: "4", name: "Loop" },
 ];
 
 class HomePage extends HTMLElement {
@@ -15,10 +16,10 @@ class HomePage extends HTMLElement {
       .map(({ id, name }) => `<li><a href="/items/${id}">${name}</a></li>`)
       .join("");
     this.innerHTML = `
-      <ab-page-header heading="Demo Frontend Standard App"></ab-page-header>
-      <p>Hello, world!</p>
+      <ab-page-header heading="${appTitle}"></ab-page-header>
+      <p>Hello, welcome to the AI code academy!</p>
       <section>
-        <h2>Featured trips</h2>
+        <h2>Engineering</h2>
         <ul>${itemLinks}</ul>
       </section>`;
   }

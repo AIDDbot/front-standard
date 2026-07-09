@@ -1,7 +1,13 @@
+export interface MenuLink {
+  href: string;
+  label: string;
+}
+
 export interface Route {
   pattern: URLPattern;
   title: string;
   load: () => Promise<string>; // Resolves to the custom-element tag name
+  menu?: MenuLink;
 }
 
 export interface RouterConfig {
