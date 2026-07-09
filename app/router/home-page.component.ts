@@ -3,9 +3,10 @@ import "../shared/components/page-header.component.js";
 export const tagName = "ab-home-page";
 
 const demoItems = [
-  { id: "1", name: "Moon flyby" },
-  { id: "2", name: "Orbital station week" },
-  { id: "3", name: "Mars window seat" },
+  { id: "1", name: "Prompts" },
+  { id: "2", name: "Context" },
+  { id: "3", name: "Harness" },
+  { id: "4", name: "Loops" },
 ];
 
 class HomePage extends HTMLElement {
