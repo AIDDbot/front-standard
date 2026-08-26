@@ -5,16 +5,22 @@ Archetype with boilerplate code for a front web app with standard HTML, CSS and 
 ## Quick start
 
 > [!IMPORTANT]
-> this projects uses `nub` as a package manager and runner.
+> this project uses `bun` as a package manager, test runner, and runtime.
 
-[Nub](https://github.com/nubjs/nub) is an all-in-one toolkit powered by Node.js that modernizes the developer experience of the Node.js ecosystem. Use it instead of node, npm run, and npx (or the equivalents in your preferred package manager).
+[Bun](https://bun.com/docs) is a fast all-in-one JavaScript and TypeScript runtime with a package manager and test runner.
 
 ```bash
-npm install -g --ignore-scripts=false @nubjs/nub   # one-time, system-level
-nub node install 26 && nub node pin 26 # latest Node.js 26 LTS
-nub install
-nub run dev   # starts the static client server on http://localhost:4000
+# one-time, system-level (Windows PowerShell)
+powershell -c "irm bun.com/install.ps1 | iex"
+
+# pin expected runtime for this repo
+bun --version  # expected: 1.4.0
+
+bun install
+bun run dev   # starts the static client server on http://localhost:4000
 ```
+
+TypeScript 7 is supported. This project uses explicit type packages in `tsconfig.json` (`bun` and `node`) to match TS 6/7 type discovery behavior.
 
 The client expects the API (the `back` project) on port 3000. 
 
