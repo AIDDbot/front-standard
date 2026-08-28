@@ -10,8 +10,9 @@ export interface Store<T> {
   subscribe: (listener: Listener<T>) => () => void;
 }
 
-export function createStore<T>(key: string, initial: T, options: StoreOptions = {}): Store<T> {
-  let value = initial;
+export function createStore<T>(key: string, initial?: T, options: StoreOptions = {}): Store<T> {
+  // `initial` is optional so persisted stores can be created without passing `undefined`.
+  let value = initial as T;
 
   if (options.persist) {
     const stored = localStorage.getItem(key);

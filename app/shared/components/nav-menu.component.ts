@@ -11,15 +11,15 @@ function getInitialTheme(): "light" | "dark" {
   return matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
 }
 
-document.documentElement.dataset.theme = getInitialTheme();
+document.documentElement.dataset["theme"] = getInitialTheme();
 
 /** App nav bar. Override the title with the `title` attribute or change `appTitle` in app-title.ts. */
 class NavMenu extends HTMLElement {
   public connectedCallback(): void {
     const title = this.getAttribute("title") ?? appTitle,
-     menuItems = menuLinks
-      .map(({ href, label }) => `<li><a href="${href}">${label}</a></li>`)
-      .join("\n            ");
+      menuItems = menuLinks
+        .map(({ href, label }) => `<li><a href="${href}">${label}</a></li>`)
+        .join("\n            ");
     this.innerHTML = `
       <header class="container">
         <nav>
@@ -39,9 +39,9 @@ class NavMenu extends HTMLElement {
       </header>`;
 
     this.querySelector("#theme-toggle")?.addEventListener("click", () => {
-      const current = document.documentElement.dataset.theme,
-       next = current === "dark" ? "light" : "dark";
-      document.documentElement.dataset.theme = next;
+      const current = document.documentElement.dataset["theme"],
+        next = current === "dark" ? "light" : "dark";
+      document.documentElement.dataset["theme"] = next;
       localStorage.setItem("theme", next);
     });
   }
