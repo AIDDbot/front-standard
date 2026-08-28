@@ -24,11 +24,24 @@ function toAttributeName(paramName: string): string {
   return paramName.replaceAll(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`);
 }
 
+function findRoute(url: URL, config: RouterConfig): Route {
+  return config.routes.find((route) => route.pattern.test(url)) ?? config.notFound;
+}
+
+function applyRouteParams(page: HTMLElement, params: Record<string, string | undefined>): void {
+  for (const [name, value] of Object.entries(params)) {
+    // Wildcard groups are numeric ("0") — not valid attribute names.
+    if (value !== undefined && /^[a-z]/i.test(name)) {
+      page.setAttribute(toAttributeName(name), value);
+    }
+  }
+}
+
 async function render(url: URL, config: RouterConfig): Promise<void> {
   const navigationId = (latestNavigationId += 1),
-   route = config.routes.find((r) => r.pattern.test(url)) ?? config.notFound,
-   params = route.pattern.exec(url)?.pathname.groups ?? {},
-   tag = await route.load();
+    route = findRoute(url, config),
+    params = route.pattern.exec(url)?.pathname.groups ?? {},
+    tag = await route.load();
 
   // A newer navigation started while this one's component was loading — drop this one.
   if (navigationId !== latestNavigationId) {
@@ -36,12 +49,7 @@ async function render(url: URL, config: RouterConfig): Promise<void> {
   }
 
   const page = document.createElement(tag);
-  for (const [name, value] of Object.entries(params)) {
-    // Wildcard groups are numeric ("0") — not valid attribute names.
-    if (value !== undefined && /^[a-z]/i.test(name)) {
-      page.setAttribute(toAttributeName(name), value);
-    }
-  }
+  applyRouteParams(page, params);
 
   config.outlet.replaceChildren(page);
   document.title = route.title;
@@ -66,5 +74,5 @@ export function createRouter(config: RouterConfig): void {
     });
   }
 
-  render(new URL(globalThis.location.href), config).catch(() => {});
+  render(new URL(globalThis.location.href), config).catch(() => { });
 }
