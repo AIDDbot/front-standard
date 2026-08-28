@@ -8,6 +8,7 @@
     "start": "bun server.ts",
     "test": "bun test",
     "test:watch": "bun test --watch",
+    "test:coverage": "bun test --coverage",
     "lint": "oxlint --fix --quiet --format=agent ",
     "lint:warnings": "oxlint --deny-warnings --format=agent ",
     "lint:complexity": "oxlint --quiet -D complexity --format=agent"
