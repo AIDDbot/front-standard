@@ -39,8 +39,8 @@ class NavMenu extends HTMLElement {
       </header>`;
 
     this.querySelector("#theme-toggle")?.addEventListener("click", () => {
-      const current = document.documentElement.dataset.theme;
-      const next = current === "dark" ? "light" : "dark";
+      const current = document.documentElement.dataset.theme,
+       next = current === "dark" ? "light" : "dark";
       document.documentElement.dataset.theme = next;
       localStorage.setItem("theme", next);
     });
