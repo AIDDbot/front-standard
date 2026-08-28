@@ -11,7 +11,7 @@
     "test:coverage": "bun test --coverage",
     "lint": "oxlint --fix --quiet --format=agent ",
     "lint:warnings": "oxlint --deny-warnings --format=agent ",
-    "lint:complexity": "oxlint --quiet -D complexity --format=agent"
+    "lint:complexity": "oxlint --quiet -D complexity --format=agent",
   },
   "dependencies": {
     "express": "^5.2.1"
