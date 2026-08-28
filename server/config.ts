@@ -5,7 +5,7 @@ export const clientSrc = process.env["CLIENT_SRC"] ?? "app";
 
 /** Production when started via `start` script or NODE_ENV=production. */
 export const isProduction =
-  process.env["npm_lifecycle_event"] === "start" || process.env["NODE_ENV"] === "production";
+  process.env["npm_lifecycle_event"] === "start" || process.env.NODE_ENV === "production";
 
 export const isDev = !isProduction;
 

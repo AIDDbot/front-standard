@@ -1,8 +1,8 @@
 const API_BASE_URL = `http://localhost:3000`;
 
 export async function get<T>(path: string): Promise<T> {
-  const url = `${API_BASE_URL}${path}`;
-  const response = await fetch(url);
+  const url = `${API_BASE_URL}${path}`,
+   response = await fetch(url);
   if (!response.ok) {
     throw new Error(`GET ${url} failed: ${response.status} ${response.statusText}`);
   }
@@ -10,8 +10,8 @@ export async function get<T>(path: string): Promise<T> {
 }
 
 export async function post<T>(path: string, body: unknown): Promise<T> {
-  const url = `${API_BASE_URL}${path}`;
-  const response = await fetch(url, {
+  const url = `${API_BASE_URL}${path}`,
+   response = await fetch(url, {
     body: JSON.stringify(body),
     headers: { "Content-Type": "application/json" },
     method: "POST",

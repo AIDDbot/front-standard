@@ -21,14 +21,14 @@ let latestNavigationId = 0;
 
 // Attribute names are case-insensitive: itemId -> item-id
 function toAttributeName(paramName: string): string {
-  return paramName.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`);
+  return paramName.replaceAll(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`);
 }
 
 async function render(url: URL, config: RouterConfig): Promise<void> {
-  const navigationId = (latestNavigationId += 1);
-  const route = config.routes.find((r) => r.pattern.test(url)) ?? config.notFound;
-  const params = route.pattern.exec(url)?.pathname.groups ?? {};
-  const tag = await route.load();
+  const navigationId = (latestNavigationId += 1),
+   route = config.routes.find((r) => r.pattern.test(url)) ?? config.notFound,
+   params = route.pattern.exec(url)?.pathname.groups ?? {},
+   tag = await route.load();
 
   // A newer navigation started while this one's component was loading — drop this one.
   if (navigationId !== latestNavigationId) {
@@ -66,5 +66,5 @@ export function createRouter(config: RouterConfig): void {
     });
   }
 
-  render(new URL(globalThis.location.href), config).catch(() => undefined);
+  render(new URL(globalThis.location.href), config).catch(() => {});
 }

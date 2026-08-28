@@ -16,7 +16,7 @@ class AboutPage extends HTMLElement {
       this.#renderHealth(cached);
     }
     // #loadHealth handles its own errors internally; nothing to await here.
-    this.#loadHealth().catch(() => undefined);
+    this.#loadHealth().catch(() => {});
   }
 
   async #loadHealth(): Promise<void> {

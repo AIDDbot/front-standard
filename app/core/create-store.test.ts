@@ -6,7 +6,7 @@ import { createStore } from "./create-store.js";
 function createLocalStorageStub(): Storage {
   const data = new Map<string, string>();
   return {
-    clear: () => data.clear(),
+    clear: () =>{  data.clear(); },
     // The built-in Storage interface returns `null` for a missing entry — not
     // `undefined` — so the stub has to match that contract.
     // oxlint-disable-next-line unicorn/no-null
@@ -40,8 +40,8 @@ test("get returns the initial value", () => {
 });
 
 test("set updates the value and notifies subscribers", () => {
-  const store = createStore("count", 0);
-  const seen: number[] = [];
+  const store = createStore("count", 0),
+   seen: number[] = [];
   store.subscribe((value) => seen.push(value));
 
   store.set(5);
@@ -51,9 +51,9 @@ test("set updates the value and notifies subscribers", () => {
 });
 
 test("subscribe's returned function stops further notifications", () => {
-  const store = createStore("count", 0);
-  const seen: number[] = [];
-  const unsubscribe = store.subscribe((value) => seen.push(value));
+  const store = createStore("count", 0),
+   seen: number[] = [],
+   unsubscribe = store.subscribe((value) => seen.push(value));
   unsubscribe();
 
   store.set(1);
