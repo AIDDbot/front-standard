@@ -2,6 +2,7 @@ const DEFAULT_PORT = 4000;
 
 export const port = process.env["PORT"] ? Number(process.env["PORT"]) : DEFAULT_PORT;
 export const clientSrc = process.env["CLIENT_SRC"] ?? "app";
+export const apiBaseUrl = process.env["API_BASE_URL"] ?? "";
 
 /** Production when started via `start` script or NODE_ENV=production. */
 export const isProduction =

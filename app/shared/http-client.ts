@@ -1,4 +1,8 @@
-const API_BASE_URL = `http://localhost:3000`;
+declare global {
+  var API_BASE_URL: string;
+}
+
+const API_BASE_URL = globalThis.API_BASE_URL;
 
 export async function get<T>(path: string): Promise<T> {
   const url = `${API_BASE_URL}${path}`,
