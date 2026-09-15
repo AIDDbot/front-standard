@@ -4,7 +4,7 @@ import path from "node:path";
 import { apiBaseUrl, clientSrc, isDev, setNoCache } from "./config.js";
 
 const indexPath = path.join(clientSrc, "index.html"),
- runtimeConfig = `<script>globalThis.API_BASE_URL = ${JSON.stringify(apiBaseUrl).replace(/</gu, "\\u003c")};</script>`,
+ runtimeConfig = `<script>globalThis.API_BASE_URL = ${JSON.stringify(apiBaseUrl).replaceAll('<', String.raw`\u003c`)};</script>`,
  indexHtml = injectRuntimeConfig(readFileSync(indexPath, "utf8"));
 
 function injectRuntimeConfig(html: string): string {

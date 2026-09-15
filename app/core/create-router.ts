@@ -74,5 +74,5 @@ export function createRouter(config: RouterConfig): void {
     });
   }
 
-  render(new URL(globalThis.location.href), config).catch(() => { });
+  render(new URL(globalThis.location.href), config).catch(() => {});
 }

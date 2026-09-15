@@ -2,7 +2,7 @@ declare global {
   var API_BASE_URL: string;
 }
 
-const API_BASE_URL = globalThis.API_BASE_URL;
+const {API_BASE_URL} = globalThis;
 
 export async function get<T>(path: string): Promise<T> {
   const url = `${API_BASE_URL}${path}`,
