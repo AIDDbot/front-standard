@@ -4,7 +4,7 @@ export const tagName = "ab-page-header";
 class PageHeader extends HTMLElement {
   public connectedCallback(): void {
     const heading = this.getAttribute("heading") ?? "",
-     subtitle = this.getAttribute("subtitle");
+      subtitle = this.getAttribute("subtitle");
     this.innerHTML = `
       <hgroup>
         <h1>${heading}</h1>

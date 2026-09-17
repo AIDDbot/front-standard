@@ -6,7 +6,9 @@ import { createStore } from "./create-store.js";
 function createLocalStorageStub(): Storage {
   const data = new Map<string, string>();
   return {
-    clear: () => { data.clear(); },
+    clear: () => {
+      data.clear();
+    },
     // The built-in Storage interface returns `null` for a missing entry — not
     // `undefined` — so the stub has to match that contract.
     // oxlint-disable-next-line unicorn/no-null

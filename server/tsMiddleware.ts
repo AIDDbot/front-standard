@@ -5,9 +5,9 @@ import path from "node:path";
 import { clientSrc, isDev, setNoCache } from "./config.js";
 
 const cache = new Map<string, { mtimeMs: number; js: string }>(),
-  { stripTypeScriptTypes } = (nodeModule as {
+  { stripTypeScriptTypes } = nodeModule as {
     stripTypeScriptTypes?: (code: string, options: { mode: "strip" }) => string;
-  });
+  };
 
 function transpileTsToJs(code: string): string {
   // Bun does not expose node:module.stripTypeScriptTypes; use its native TS transpiler.
@@ -24,13 +24,15 @@ function transpileTsToJs(code: string): string {
 
 export function serveTsAsJs(req: Request, res: Response, next: NextFunction): void {
   if (!req.path.endsWith(".js")) {
-    next();; return;
+    next();
+    return;
   }
 
   const tsPath = path.join(clientSrc, req.path.replace(/\.js$/u, ".ts"));
   // Return if not found
   if (!existsSync(tsPath)) {
-    next();; return;
+    next();
+    return;
   }
   const { mtimeMs } = statSync(tsPath);
 
