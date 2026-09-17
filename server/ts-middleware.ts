@@ -22,6 +22,26 @@ const transpileTsToJs = (code: string): string => {
   throw new Error("No TypeScript transpiler available for runtime.");
 };
 
+function getTranspiledJavaScript(tsPath: string): string {
+  const js = transpileTsToJs(readFileSync(tsPath, "utf8"));
+  const { mtimeMs } = statSync(tsPath);
+  if (!isDev) {
+    cache.set(tsPath, { js, mtimeMs });
+  }
+  return js;
+}
+
+function getCachedOrTranspile(tsPath: string, mtimeMs: number): string {
+  if (isDev) {
+    return getTranspiledJavaScript(tsPath);
+  }
+  const cached = cache.get(tsPath);
+  if (cached && cached.mtimeMs === mtimeMs) {
+    return cached.js;
+  }
+  return getTranspiledJavaScript(tsPath);
+}
+
 export const serveTsAsJs = (req: Request, res: Response, next: NextFunction): void => {
   if (!req.path.endsWith(".js")) {
     next();
@@ -29,25 +49,13 @@ export const serveTsAsJs = (req: Request, res: Response, next: NextFunction): vo
   }
 
   const tsPath = path.join(clientSrc, req.path.replace(/\.js$/u, ".ts"));
-  // Return if not found
   if (!existsSync(tsPath)) {
     next();
     return;
   }
   const { mtimeMs } = statSync(tsPath);
 
-  if (!isDev) {
-    const cached = cache.get(tsPath);
-    if (cached && cached.mtimeMs === mtimeMs) {
-      res.type("text/javascript").send(cached.js);
-      return;
-    }
-  }
-
-  const js = transpileTsToJs(readFileSync(tsPath, "utf8"));
-  if (!isDev) {
-    cache.set(tsPath, { js, mtimeMs });
-  }
+  const js = getCachedOrTranspile(tsPath, mtimeMs);
   if (isDev) {
     setNoCache(res);
   }

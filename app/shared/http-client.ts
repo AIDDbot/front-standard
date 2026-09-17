@@ -8,6 +8,7 @@ const get = async <T>(path: string): Promise<T> => {
   if (!response.ok) {
     throw new Error(`GET ${url} failed: ${response.status} ${response.statusText}`);
   }
+  // oxlint-disable-next-line typescript/no-unsafe-type-assertion
   return response.json() as Promise<T>;
 };
 
@@ -21,6 +22,7 @@ const post = async <T>(path: string, body: unknown): Promise<T> => {
   if (!response.ok) {
     throw new Error(`POST ${url} failed: ${response.status} ${response.statusText}`);
   }
+  // oxlint-disable-next-line typescript/no-unsafe-type-assertion
   return response.json() as Promise<T>;
 };
 

@@ -51,7 +51,9 @@ void test("get returns the initial value", () => {
 void test("set updates the value and notifies subscribers", () => {
   const store = createStore("count", INITIAL_COUNT);
   const seen: number[] = [];
-  store.subscribe((value) => seen.push(value));
+  store.subscribe((value) => {
+    seen.push(value);
+  });
 
   store.set(TEST_COUNT_FIVE);
 
@@ -62,7 +64,9 @@ void test("set updates the value and notifies subscribers", () => {
 void test("subscribe's returned function stops further notifications", () => {
   const store = createStore("count", INITIAL_COUNT);
   const seen: number[] = [];
-  const unsubscribe = store.subscribe((value) => seen.push(value));
+  const unsubscribe = store.subscribe((value) => {
+    seen.push(value);
+  });
   unsubscribe();
 
   store.set(TEST_COUNT_ONE);

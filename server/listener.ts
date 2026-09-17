@@ -4,6 +4,7 @@ import { createInterface } from "node:readline/promises";
 import { setTimeout as delay } from "node:timers/promises";
 import { promisify } from "node:util";
 
+// oxlint-disable-next-line typescript/strict-void-return
 const exec = promisify(execCallback);
 const RETRY_DELAY_MS = 300;
 
@@ -54,7 +55,7 @@ const findPortConflict = async (port: number): Promise<PortConflict | null> => {
       ? findWindowsConflict(port)
       : findPosixConflict(port));
   } catch {
-    return undefined;
+    return null;
   }
 };
 
@@ -74,18 +75,27 @@ const confirm = async (question: string): Promise<boolean> => {
   return /^y(es)?$/iu.test(answer.trim());
 };
 
-const handlePortInUse = async (app: Express, port: number): Promise<void> => {
-  const conflict = await findPortConflict(port);
-  if (!conflict) {
-    process.stderr.write(
-      `Port ${port} is already in use. Stop the process using it and retry.\n`,
-    );
-    process.exit(1);
-  }
-
+const reportPortConflict = (conflict: PortConflict, port: number): void => {
   process.stderr.write(
     `Port ${port} is already in use by ${conflict.processName} (PID ${conflict.pid}).\n`,
   );
+};
+
+const reportPortInUseError = (port: number): void => {
+  process.stderr.write(
+    `Port ${port} is already in use. Stop the process using it and retry.\n`,
+  );
+  process.exit(1);
+};
+
+const handlePortInUse = async (app: Express, port: number): Promise<void> => {
+  const conflict = await findPortConflict(port);
+  if (!conflict) {
+    reportPortInUseError(port);
+    return;
+  }
+
+  reportPortConflict(conflict, port);
   const shouldKill = await confirm(`Kill PID ${conflict.pid} and retry? (y/N) `);
   if (!shouldKill) {
     process.exit(1);
@@ -97,9 +107,9 @@ const handlePortInUse = async (app: Express, port: number): Promise<void> => {
 };
 
 export const listen = (app: Express, port: number): void => {
-  const server = app.listen(port, () =>
-    process.stdout.write(`Serving client at http://localhost:${port}\n`),
-  );
+  const server = app.listen(port, () => {
+    process.stdout.write(`Serving client at http://localhost:${port}\n`);
+  });
 
   server.on("error", (error: NodeJS.ErrnoException) => {
     if (error.code === "EADDRINUSE") {

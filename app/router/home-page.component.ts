@@ -13,7 +13,7 @@ const demoItems = [
 class HomePage extends HTMLElement {
   public connectedCallback(): void {
     const itemLinks = demoItems
-      .map(({ id, name }) => `<li><a href="/items/${id}">${name}</a></li>`)
+      .map(({ id, name }: Readonly<{ id: string; name: string }>) => `<li><a href="/items/${id}">${name}</a></li>`)
       .join("");
     this.innerHTML = `
       <ab-page-header heading="${appTitle}"></ab-page-header>

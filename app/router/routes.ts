@@ -23,7 +23,7 @@ export const routes: Route[] = [
 
 export const menuLinks = routes.flatMap((route) => (route.menu ? [route.menu] : []));
 
-export const notFoundRoute: Route = {
+export const notFoundRoute: Readonly<Route> = {
   load: () => import("./not-found-page.component.js").then((m) => m.tagName),
   pattern: new URLPattern({ pathname: "*" }),
   title: "Not found ",

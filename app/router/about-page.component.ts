@@ -16,7 +16,7 @@ class AboutPage extends HTMLElement {
       this.#renderHealth(cached);
     }
     // #loadHealth handles its own errors internally; nothing to await here.
-    this.#loadHealth().catch(() => {});
+    this.#loadHealth().catch(() => { });
   }
 
   async #loadHealth(): Promise<void> {
@@ -32,7 +32,7 @@ class AboutPage extends HTMLElement {
     }
   }
 
-  #renderHealth({ uptime, runs }: HealthStatus): void {
+  #renderHealth({ uptime, runs }: Readonly<HealthStatus>): void {
     const statusEl = this.querySelector("#health-status");
     if (statusEl) {
       statusEl.textContent = `Server up for ${Math.floor(uptime)}s — ${runs} run(s) recorded.`;

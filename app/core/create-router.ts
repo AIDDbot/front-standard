@@ -6,7 +6,8 @@ export interface MenuLink {
 export interface Route {
   pattern: URLPattern;
   title: string;
-  load: () => Promise<string>; // Resolves to the custom-element tag name
+  // Resolves to the custom-element tag name
+  load: () => Promise<string>;
   menu?: MenuLink;
 }
 
@@ -24,11 +25,11 @@ const toAttributeName = (paramName: string): string => {
   return paramName.replaceAll(/[A-Z]/gu, (letter) => `-${letter.toLowerCase()}`);
 };
 
-const findRoute = (url: URL, config: RouterConfig): Route => {
+const findRoute = (url: URL, config: Readonly<RouterConfig>): Route => {
   return config.routes.find((route) => route.pattern.test(url)) ?? config.notFound;
 };
 
-const applyRouteParams = (page: HTMLElement, params: Record<string, string | undefined>): void => {
+const applyRouteParams = (page: HTMLElement, params: Readonly<Record<string, string | undefined>>): void => {
   for (const [name, value] of Object.entries(params)) {
     // Wildcard groups are numeric ("0") — not valid attribute names.
     if (value !== undefined && /^[a-z]/iu.test(name)) {
@@ -37,43 +38,43 @@ const applyRouteParams = (page: HTMLElement, params: Record<string, string | und
   }
 };
 
-const render = async (url: URL, config: RouterConfig): Promise<void> => {
+const renderPage = (tag: string, params: Readonly<Record<string, string | undefined>>, config: Readonly<RouterConfig>, route: Readonly<Route>): void => {
+  const page = document.createElement(tag);
+  applyRouteParams(page, params);
+  config.outlet.replaceChildren(page);
+  document.title = route.title;
+  config.outlet.focus();
+  config.onNavigated?.(new URL(globalThis.location.href));
+};
+
+const render = async (url: URL, config: Readonly<RouterConfig>): Promise<void> => {
   const FIRST_NAVIGATION_ID = 1;
   const navigationId = (latestNavigationId += FIRST_NAVIGATION_ID);
   const route = findRoute(url, config);
   const params = route.pattern.exec(url)?.pathname.groups ?? {};
   const tag = await route.load();
 
-  // A newer navigation started while this one's component was loading — drop this one.
   if (navigationId !== latestNavigationId) {
     return;
   }
 
-  const page = document.createElement(tag);
-  applyRouteParams(page, params);
-
-  config.outlet.replaceChildren(page);
-  document.title = route.title;
+  renderPage(tag, params, config, route);
   const SCROLL_TOP = 0;
   window.scrollTo(SCROLL_TOP, SCROLL_TOP);
-  config.outlet.focus();
-  config.onNavigated?.(url);
 };
 
-export const createRouter = (config: RouterConfig): void => {
+export const createRouter = (config: Readonly<RouterConfig>): void => {
   const FOCUS_TARGET_OFFSET = -1;
-  config.outlet.tabIndex = FOCUS_TARGET_OFFSET; // Focus target after each navigation
+  // Focus target after each navigation
+  config.outlet.tabIndex = FOCUS_TARGET_OFFSET;
 
   if ("navigation" in globalThis) {
     navigation.addEventListener("navigate", (event) => {
-      // Let the browser handle downloads, same-page hash jumps, and
-      // Anything it refuses to intercept (cross-origin, etc.).
       if (!event.canIntercept || event.hashChange || event.downloadRequest !== null) {
         return;
       }
-
       const url = new URL(event.destination.url);
-      event.intercept({ handler: async () => render(url, config) });
+      event.intercept({ handler: () => render(url, config) });
     });
   }
 
