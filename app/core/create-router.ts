@@ -20,28 +20,29 @@ export interface RouterConfig {
 let latestNavigationId = 0;
 
 // Attribute names are case-insensitive: itemId -> item-id
-function toAttributeName(paramName: string): string {
-  return paramName.replaceAll(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`);
-}
+const toAttributeName = (paramName: string): string => {
+  return paramName.replaceAll(/[A-Z]/gu, (letter) => `-${letter.toLowerCase()}`);
+};
 
-function findRoute(url: URL, config: RouterConfig): Route {
+const findRoute = (url: URL, config: RouterConfig): Route => {
   return config.routes.find((route) => route.pattern.test(url)) ?? config.notFound;
-}
+};
 
-function applyRouteParams(page: HTMLElement, params: Record<string, string | undefined>): void {
+const applyRouteParams = (page: HTMLElement, params: Record<string, string | undefined>): void => {
   for (const [name, value] of Object.entries(params)) {
     // Wildcard groups are numeric ("0") — not valid attribute names.
-    if (value !== undefined && /^[a-z]/i.test(name)) {
+    if (value !== undefined && /^[a-z]/iu.test(name)) {
       page.setAttribute(toAttributeName(name), value);
     }
   }
-}
+};
 
-async function render(url: URL, config: RouterConfig): Promise<void> {
-  const navigationId = (latestNavigationId += 1),
-    route = findRoute(url, config),
-    params = route.pattern.exec(url)?.pathname.groups ?? {},
-    tag = await route.load();
+const render = async (url: URL, config: RouterConfig): Promise<void> => {
+  const FIRST_NAVIGATION_ID = 1;
+  const navigationId = (latestNavigationId += FIRST_NAVIGATION_ID);
+  const route = findRoute(url, config);
+  const params = route.pattern.exec(url)?.pathname.groups ?? {};
+  const tag = await route.load();
 
   // A newer navigation started while this one's component was loading — drop this one.
   if (navigationId !== latestNavigationId) {
@@ -53,13 +54,15 @@ async function render(url: URL, config: RouterConfig): Promise<void> {
 
   config.outlet.replaceChildren(page);
   document.title = route.title;
-  window.scrollTo(0, 0);
+  const SCROLL_TOP = 0;
+  window.scrollTo(SCROLL_TOP, SCROLL_TOP);
   config.outlet.focus();
   config.onNavigated?.(url);
-}
+};
 
-export function createRouter(config: RouterConfig): void {
-  config.outlet.tabIndex = -1; // Focus target after each navigation
+export const createRouter = (config: RouterConfig): void => {
+  const FOCUS_TARGET_OFFSET = -1;
+  config.outlet.tabIndex = FOCUS_TARGET_OFFSET; // Focus target after each navigation
 
   if ("navigation" in globalThis) {
     navigation.addEventListener("navigate", (event) => {
@@ -74,5 +77,5 @@ export function createRouter(config: RouterConfig): void {
     });
   }
 
-  render(new URL(globalThis.location.href), config).catch(() => {});
-}
+  render(new URL(globalThis.location.href), config).catch(() => { });
+};

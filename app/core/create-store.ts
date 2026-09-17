@@ -14,7 +14,7 @@ export function createStore<T>(key: string, initial?: T, options: StoreOptions =
   // `initial` is optional so persisted stores can be created without passing `undefined`.
   let value = initial as T;
 
-  if (options.persist) {
+  if (options.persist === true) {
     const stored = localStorage.getItem(key);
     if (stored !== null) {
       try {
@@ -36,7 +36,7 @@ export function createStore<T>(key: string, initial?: T, options: StoreOptions =
     },
     set(next: T): void {
       value = next;
-      if (options.persist) {
+      if (options.persist === true) {
         localStorage.setItem(key, JSON.stringify(next));
       }
       for (const listener of listeners) {
@@ -45,7 +45,9 @@ export function createStore<T>(key: string, initial?: T, options: StoreOptions =
     },
     subscribe(listener: Listener<T>): () => void {
       listeners.add(listener);
-      return () => listeners.delete(listener);
+      return () => {
+        listeners.delete(listener);
+      };
     },
   };
 }
