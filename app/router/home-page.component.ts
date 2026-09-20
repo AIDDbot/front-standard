@@ -1,3 +1,4 @@
+import { escapeHtml } from "../core/escape-html.js";
 import "../shared/components/page-header.component.js";
 import { appTitle } from "../shared/global.js";
 
@@ -13,10 +14,13 @@ const demoItems = [
 class HomePage extends HTMLElement {
   public connectedCallback(): void {
     const itemLinks = demoItems
-      .map(({ id, name }: Readonly<{ id: string; name: string }>) => `<li><a href="/items/${id}">${name}</a></li>`)
+      .map(
+        ({ id, name }: Readonly<{ id: string; name: string }>) =>
+          `<li><a href="/items/${escapeHtml(id)}">${escapeHtml(name)}</a></li>`,
+      )
       .join("");
     this.innerHTML = `
-      <ab-page-header heading="${appTitle}"></ab-page-header>
+      <ab-page-header heading="${escapeHtml(appTitle)}"></ab-page-header>
       <p>Hello, welcome to the AI code academy!</p>
       <section>
         <h2>Engineering</h2>

@@ -7,10 +7,11 @@ class PageHeader extends HTMLElement {
     const subtitle = this.getAttribute("subtitle");
     this.innerHTML = `
       <hgroup>
-        <h1>${heading}</h1>
-        ${subtitle ? `<p>${subtitle}</p>` : ""}
+        <h1>${escapeHtml(heading)}</h1>
+        ${subtitle ? `<p>${escapeHtml(subtitle)}</p>` : ""}
       </hgroup>`;
   }
 }
 
 customElements.define(tagName, PageHeader);
+import { escapeHtml } from "../../core/escape-html.js";

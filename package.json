@@ -1,5 +1,6 @@
 {
   "name": "front-standard",
+  "displayName": "Demo Frontend",
   "version": "1.0.0",
   "description": "Standard web client — framework-free HTML/CSS/TS.",
   "author": {

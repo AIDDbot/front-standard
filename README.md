@@ -31,8 +31,23 @@ bun dev     # runs in watch mode for development
 bun lint    # runs the linter
 ```
 
+During regular development, run only the unit tests and basic lint checks:
+
+```bash
+bun test
+bun run lint
+```
+
+The `quality:all` script is intended for final validation or when explicitly requested; it does not need to be run after every development change.
+
 > [!IMPORTANT]
 > The client expects the API (the `back` project) on port 3000.
+
+The application title is configured with `displayName` in `package.json` (and falls back to the package `name`).
+
+## Rendering untrusted values
+
+Prefer DOM APIs such as `textContent` for dynamic content. When a value must be interpolated into an `innerHTML` template, escape it first with `escapeHtml` from `app/core/escape-html.ts`. Escaping HTML does not validate URLs; validate untrusted links separately before using them in `href` or `src` attributes.
 
 ## Tool stack
 

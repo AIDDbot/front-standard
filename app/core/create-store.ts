@@ -25,7 +25,20 @@ function loadPersistedValue<T>(key: string, fallback: T): T {
   }
 }
 
-export function createStore<T>(key: string, initial?: T, options: Readonly<StoreOptions> = {}): Store<T> {
+function persistValue(key: string, value: unknown): void {
+  if (!key) return;
+  if (value === undefined) {
+    localStorage.removeItem(key);
+    return;
+  }
+  localStorage.setItem(key, JSON.stringify(value));
+}
+
+export function createStore<T>(
+  key: string,
+  initial?: T,
+  options: Readonly<StoreOptions> = {},
+): Store<T> {
   // `initial` is optional so persisted stores can be created without passing `undefined`.
   // oxlint-disable-next-line typescript/no-unsafe-type-assertion
   let value = options.persist === true ? loadPersistedValue(key, initial as T) : (initial as T);
@@ -39,7 +52,7 @@ export function createStore<T>(key: string, initial?: T, options: Readonly<Store
     set(next: T): void {
       value = next;
       if (options.persist === true) {
-        localStorage.setItem(key, JSON.stringify(next));
+        persistValue(key, next);
       }
       for (const listener of listeners) {
         listener(next);
