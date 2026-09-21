@@ -61,7 +61,8 @@ const findPortConflict = async (port: number): Promise<PortConflict | null> => {
 
 const killProcess = async (pid: number): Promise<void> => {
   const KILL_TIMEOUT_MS = 9;
-  const command = process.platform === "win32" ? `taskkill /F /PID ${pid}` : `kill -${KILL_TIMEOUT_MS} ${pid}`;
+  const command =
+    process.platform === "win32" ? `taskkill /F /PID ${pid}` : `kill -${KILL_TIMEOUT_MS} ${pid}`;
   await exec(command);
 };
 
@@ -82,9 +83,7 @@ const reportPortConflict = (conflict: PortConflict, port: number): void => {
 };
 
 const reportPortInUseError = (port: number): void => {
-  process.stderr.write(
-    `Port ${port} is already in use. Stop the process using it and retry.\n`,
-  );
+  process.stderr.write(`Port ${port} is already in use. Stop the process using it and retry.\n`);
   process.exit(1);
 };
 

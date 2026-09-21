@@ -29,7 +29,10 @@ const findRoute = (url: URL, config: Readonly<RouterConfig>): Route => {
   return config.routes.find((route) => route.pattern.test(url)) ?? config.notFound;
 };
 
-const applyRouteParams = (page: HTMLElement, params: Readonly<Record<string, string | undefined>>): void => {
+const applyRouteParams = (
+  page: HTMLElement,
+  params: Readonly<Record<string, string | undefined>>,
+): void => {
   for (const [name, value] of Object.entries(params)) {
     // Wildcard groups are numeric ("0") — not valid attribute names.
     if (value !== undefined && /^[a-z]/iu.test(name)) {
@@ -38,7 +41,12 @@ const applyRouteParams = (page: HTMLElement, params: Readonly<Record<string, str
   }
 };
 
-const renderPage = (tag: string, params: Readonly<Record<string, string | undefined>>, config: Readonly<RouterConfig>, route: Readonly<Route>): void => {
+const renderPage = (
+  tag: string,
+  params: Readonly<Record<string, string | undefined>>,
+  config: Readonly<RouterConfig>,
+  route: Readonly<Route>,
+): void => {
   const page = document.createElement(tag);
   applyRouteParams(page, params);
   config.outlet.replaceChildren(page);
@@ -78,5 +86,5 @@ export const createRouter = (config: Readonly<RouterConfig>): void => {
     });
   }
 
-  render(new URL(globalThis.location.href), config).catch(() => { });
+  render(new URL(globalThis.location.href), config).catch(() => {});
 };
