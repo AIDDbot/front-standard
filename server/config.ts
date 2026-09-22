@@ -1,6 +1,8 @@
 import { readFileSync } from "node:fs";
 
 const DEFAULT_PORT = 4000;
+const DEFAULT_API_SITE = "http://localhost";
+const DEFAULT_API_PORT = 3000;
 
 function readAppTitle(): string {
   const packageConfig: unknown = JSON.parse(readFileSync("package.json", "utf8"));
@@ -18,7 +20,10 @@ function readAppTitle(): string {
 
 export const port = process.env["PORT"] ? Number(process.env["PORT"]) : DEFAULT_PORT;
 export const clientSrc = process.env["CLIENT_SRC"] ?? "app";
-export const apiBaseUrl = process.env["API_BASE_URL"] ?? "";
+const apiSite = (process.env["API_SITE"] || DEFAULT_API_SITE).replace(/\/+$/, "");
+const apiPort = process.env["API_PORT"] || String(DEFAULT_API_PORT);
+/** `API_BASE_URL` wins when set; otherwise it is composed from `API_SITE` and `API_PORT`. */
+export const apiBaseUrl = process.env["API_BASE_URL"] || `${apiSite}:${apiPort}`;
 export const appTitle = readAppTitle();
 
 /** Production when started via `start` script or NODE_ENV=production. */

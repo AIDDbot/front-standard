@@ -41,7 +41,9 @@ bun run lint
 The `quality:all` script is intended for final validation or when explicitly requested; it does not need to be run after every development change.
 
 > [!IMPORTANT]
-> The client expects the API (the `back` project) on port 3000.
+> The client expects the API (the `back` project) at `http://localhost:3000` by default.
+> Change it with `API_SITE` (default `http://localhost`) and `API_PORT` (default `3000`),
+> or set `API_BASE_URL` to override the whole URL.
 
 The application title is configured with `displayName` in `package.json` (and falls back to the package `name`).
 
