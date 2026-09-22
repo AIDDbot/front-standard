@@ -1,12 +1,12 @@
 import type { Request, Response } from "express";
 import { readFileSync } from "node:fs";
 import path from "node:path";
-import { apiBaseUrl, appTitle, clientSrc, isDev, setNoCache } from "./config.js";
+import { apiBaseUrl, appAuthor, appTitle, clientSrc, isDev, setNoCache } from "./config.js";
 
 const indexPath = path.join(clientSrc, "index.html");
-const serialize = (value: string): string =>
-  JSON.stringify(value).replaceAll("<", String.raw`\u003c`);
-const runtimeConfig = `<script>globalThis.API_BASE_URL = ${serialize(apiBaseUrl)}; globalThis.APP_TITLE = ${serialize(appTitle)};</script>`;
+const serialize = (value: unknown): string =>
+  JSON.stringify(value ?? null).replaceAll("<", String.raw`\u003c`);
+const runtimeConfig = `<script>globalThis.API_BASE_URL = ${serialize(apiBaseUrl)}; globalThis.APP_TITLE = ${serialize(appTitle)}; globalThis.APP_AUTHOR = ${serialize(appAuthor)};</script>`;
 const indexHtml = injectRuntimeConfig(readFileSync(indexPath, "utf8"));
 
 function injectRuntimeConfig(html: string): string {
