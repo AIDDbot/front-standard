@@ -21,7 +21,7 @@ const renderAuthor = (author: Readonly<AppAuthor> | null): string => {
 class AboutPage extends HTMLElement {
   public connectedCallback(): void {
     this.innerHTML = `
-      <ab-page-header heading="About" subtitle="Express demo — built on web standards only."></ab-page-header>
+      <ab-page-header heading="About" subtitle="Just a demo built on web standards only."></ab-page-header>
       <p>Routing via the Navigation API, components as custom elements loaded on demand.</p>
       ${renderAuthor(appAuthor)}
       <p id="health-status">Loading health…</p>`;

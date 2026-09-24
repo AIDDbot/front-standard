@@ -1,6 +1,7 @@
 import { escapeHtml } from "../../core/escape-html.js";
 import { menuLinks } from "../../router/routes.js";
 import { appTitle } from "../global.js";
+import { authStore } from "../store/auth.store.js";
 
 export const tagName = "ab-nav-menu";
 
@@ -41,9 +42,19 @@ class NavMenu extends HTMLElement {
       .join("\n            ");
   }
 
-  public connectedCallback(): void {
+  #renderAuthLinks(): string {
+    const session = authStore.get();
+    if (session) {
+      return `<li>${escapeHtml(session.user.name)} (${escapeHtml(session.user.role)})</li>`;
+    }
+    return `<li><a href="/register">Register</a></li>
+            <li><a href="/login">Login</a></li>`;
+  }
+
+  #render(): void {
     const title = this.getAttribute("title") ?? appTitle;
     const menuItems = this.#renderMenuItems();
+    const authLinks = this.#renderAuthLinks();
     this.innerHTML = `
       <header class="container">
         <nav>
@@ -52,6 +63,7 @@ class NavMenu extends HTMLElement {
           </ul>
           <ul>
             ${menuItems}
+            ${authLinks}
             <li>
               <button id="theme-toggle" type="button" aria-label="Toggle theme">
                 <span class="light">☼</span>
@@ -62,6 +74,13 @@ class NavMenu extends HTMLElement {
         </nav>
       </header>`;
     this.#setupThemeToggle();
+  }
+
+  public connectedCallback(): void {
+    this.#render();
+    authStore.subscribe(() => {
+      this.#render();
+    });
   }
 }
 

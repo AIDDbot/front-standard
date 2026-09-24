@@ -5,10 +5,10 @@ import { appTitle } from "../shared/global.js";
 export const tagName = "ab-home-page";
 
 const demoItems = [
-  { id: "1", name: "Promt" },
-  { id: "2", name: "Context" },
-  { id: "3", name: "Harness" },
-  { id: "4", name: "Loop" },
+  { id: "1", name: "A web app with no more than standards" },
+  { id: "2", name: "A backend API based on Express" },
+  { id: "3", name: "A bun/node CLI" },
+  { id: "4", name: "End to end tested with Playwright" },
 ];
 
 class HomePage extends HTMLElement {
@@ -21,11 +21,15 @@ class HomePage extends HTMLElement {
       .join("");
     this.innerHTML = `
       <ab-page-header heading="${escapeHtml(appTitle)}"></ab-page-header>
-      <p>Hello, welcome to the AI code academy!</p>
+      <h3>Build software you can trust with AIDDbot</h3>
       <section>
-        <h2>Engineering</h2>
+        <h2>Archetypes</h2>
         <ul>${itemLinks}</ul>
-      </section>`;
+      </section>
+      <section>
+        <p>You can safely remove this content and start coding your dreams.</p>
+      </section>
+      `;
   }
 }
 

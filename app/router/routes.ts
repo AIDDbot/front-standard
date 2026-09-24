@@ -19,6 +19,16 @@ export const routes: Route[] = [
     pattern: new URLPattern({ pathname: "/items/:itemId" }),
     title: "Item — Details",
   },
+  {
+    load: () => import("./register-page.component.js").then((m) => m.tagName),
+    pattern: new URLPattern({ pathname: "/register" }),
+    title: `Register — ${appTitle}`,
+  },
+  {
+    load: () => import("./login-page.component.js").then((m) => m.tagName),
+    pattern: new URLPattern({ pathname: "/login" }),
+    title: `Log in — ${appTitle}`,
+  },
 ];
 
 export const menuLinks = routes.flatMap((route) => (route.menu ? [route.menu] : []));
