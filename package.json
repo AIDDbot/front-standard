@@ -6,8 +6,8 @@
   "author": "Alberto Basalo from aicode.academy",
   "type": "module",
   "scripts": {
-    "dev": "bun --watch server.ts",
-    "start": "bun server.ts",
+    "dev": "bun --watch src/server/main.ts",
+    "start": "bun src/server/main.ts",
     "test": "bun test",
     "test:watch": "bun test --watch",
     "lint": "oxlint --format=agent --quiet",

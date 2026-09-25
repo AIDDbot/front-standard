@@ -49,12 +49,12 @@ The application title is configured with `displayName` in `package.json` (and fa
 
 ## Rendering untrusted values
 
-Prefer DOM APIs such as `textContent` for dynamic content. When a value must be interpolated into an `innerHTML` template, escape it first with `escapeHtml` from `app/core/escape-html.ts`. Escaping HTML does not validate URLs; validate untrusted links separately before using them in `href` or `src` attributes.
+Prefer DOM APIs such as `textContent` for dynamic content. When a value must be interpolated into an `innerHTML` template, escape it first with `escapeHtml` from `src/app/core/escape-html.ts`. Escaping HTML does not validate URLs; validate untrusted links separately before using them in `href` or `src` attributes.
 
 ## Logging
 
-- **Server**: `createLogger(source)` from `server/logger.ts` appends to `LOG_DIR/yyyy-mm-dd.log` (default `./logs`) and echoes to the console. Every HTTP request gets one line. Set the minimum level with `LOG_LEVEL` (`debug` | `info` | `warn` | `error`, default `info`).
-- **Browser**: `createLogger(source)` from `app/core/create-logger.ts` writes to the browser console with the same line format. Extra arguments are passed through so objects stay inspectable:
+- **Server**: `createLogger(source)` from `src/server/logger.ts` appends to `LOG_DIR/yyyy-mm-dd.log` (default `./logs`) and echoes to the console. Every HTTP request gets one line. Set the minimum level with `LOG_LEVEL` (`debug` | `info` | `warn` | `error`, default `info`).
+- **Browser**: `createLogger(source)` from `src/app/core/create-logger.ts` writes to the browser console with the same line format. Extra arguments are passed through so objects stay inspectable:
 
 ```ts
 import { createLogger } from "../core/create-logger.js";
