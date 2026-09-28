@@ -51,6 +51,12 @@ The application title is configured with `displayName` in `package.json` (and fa
 
 Prefer DOM APIs such as `textContent` for dynamic content. When a value must be interpolated into an `innerHTML` template, escape it first with `escapeHtml` from `src/app/core/escape-html.ts`. Escaping HTML does not validate URLs; validate untrusted links separately before using them in `href` or `src` attributes.
 
+## Conventions
+
+- Repositories call the API only through `get`, `post`, `put`, `patch` and `del` from `src/app/shared/http-client.ts`; it adds the bearer token and handles `204 No Content`.
+- A failed request throws `ApiError` with `status` and the API's error text; branch on it with `isApiError(error) && error.status === 404`, never with type assertions. A `401` also clears `authStore`.
+- Asset URLs in `index.html` are root-absolute (`/styles/...`, `/logo.png`) so nested routes such as `/items/42` load styled on reload.
+
 ## Logging
 
 - **Server**: `createLogger(source)` from `src/server/logger.ts` appends to `LOG_DIR/yyyy-mm-dd.log` (default `./logs`) and echoes to the console. Every HTTP request gets one line. Set the minimum level with `LOG_LEVEL` (`debug` | `info` | `warn` | `error`, default `info`).
