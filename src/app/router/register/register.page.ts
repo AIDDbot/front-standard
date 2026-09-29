@@ -1,20 +1,15 @@
-import "../shared/components/page-header.component.js";
-import { goTo } from "../shared/navigate.js";
-import { register, type RegisterRequest } from "../shared/repositories/auth.repository.js";
+import "../../shared/components/page-header.component.js";
+import { goTo } from "../../shared/navigate.js";
+import { register } from "../../shared/repositories/auth.repository.js";
+import type { RegisterFormFields } from "./register.types.js";
 
 export const tagName = "ab-register-page";
-
-interface RegisterFormFields {
-  email: string;
-  name: string;
-  password: string;
-}
 
 class RegisterPage extends HTMLElement {
   public connectedCallback(): void {
     this.innerHTML = `
       <ab-page-header heading="Register" subtitle="Create your account."></ab-page-header>
-      <form id="register-form">
+      <form aria-label="Register">
         <label for="register-email">Email</label>
         <input id="register-email" name="email" type="email" autocomplete="email" required />
         <label for="register-name">Name</label>
@@ -29,9 +24,9 @@ class RegisterPage extends HTMLElement {
         />
         <button type="submit">Register</button>
       </form>
-      <p id="register-error" role="alert"></p>`;
+      <p role="alert" data-testid="register-error"></p>`;
 
-    this.querySelector("#register-form")?.addEventListener("submit", (event: Readonly<Event>) => {
+    this.querySelector("form")?.addEventListener("submit", (event: Readonly<Event>) => {
       event.preventDefault();
       this.#submit();
     });
@@ -39,29 +34,31 @@ class RegisterPage extends HTMLElement {
 
   #readFields(form: Readonly<HTMLFormElement>): RegisterFormFields {
     return {
-      email: form.querySelector<HTMLInputElement>("#register-email")?.value ?? "",
-      name: form.querySelector<HTMLInputElement>("#register-name")?.value ?? "",
-      password: form.querySelector<HTMLInputElement>("#register-password")?.value ?? "",
+      email: form.querySelector<HTMLInputElement>('[name="email"]')?.value ?? "",
+      name: form.querySelector<HTMLInputElement>('[name="name"]')?.value ?? "",
+      password: form.querySelector<HTMLInputElement>('[name="password"]')?.value ?? "",
     };
   }
 
   #submit(): void {
-    const form = this.querySelector<HTMLFormElement>("#register-form");
-    const errorEl = this.querySelector<HTMLElement>("#register-error");
+    const form = this.querySelector("form");
+    const errorEl = this.querySelector('[data-testid="register-error"]');
     if (!form || !errorEl) return;
     const button = form.querySelector<HTMLButtonElement>('button[type="submit"]');
     if (!button || button.disabled) return;
 
     errorEl.textContent = "";
-    this.#sendRegister(this.#readFields(form), button, errorEl);
+    this.#sendRegister(this.#readFields(form), form, button, errorEl);
   }
 
   #sendRegister(
-    request: Readonly<RegisterRequest>,
+    request: Readonly<RegisterFormFields>,
+    form: HTMLFormElement,
     button: HTMLButtonElement,
-    errorEl: HTMLElement,
+    errorEl: Element,
   ): void {
     button.disabled = true;
+    form.setAttribute("aria-busy", "true");
     register(request)
       .then(() => {
         goTo("/login?registered=1");
@@ -71,6 +68,7 @@ class RegisterPage extends HTMLElement {
       })
       .finally(() => {
         button.disabled = false;
+        form.setAttribute("aria-busy", "false");
       });
   }
 }

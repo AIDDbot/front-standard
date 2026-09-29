@@ -20,6 +20,38 @@
   },
   "overrides": [
     {
+      "files": ["src/app/router/*/**/*.ts"],
+      "rules": {
+        "eslint/no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "regex": "^\\.\\./[^.]",
+                "message": "Pages must not import from other pages; promote shared code to src/app/shared."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["src/app/shared/**/*.ts", "src/app/core/**/*.ts"],
+      "rules": {
+        "eslint/no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "regex": "/router/",
+                "message": "shared and core must not depend on router."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
       "files": ["**/*.test.ts", "**/*.spec.ts"],
       "rules": {
         "@typescript-eslint/prefer-readonly-parameter-types": "off",

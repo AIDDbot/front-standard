@@ -1,5 +1,5 @@
-import { escapeHtml } from "../core/escape-html.js";
-import "../shared/components/page-header.component.js";
+import { escapeHtml } from "../../core/escape-html.js";
+import "../../shared/components/page-header.component.js";
 
 export const tagName = "ab-item-detail-page";
 
@@ -9,8 +9,10 @@ class ItemDetailPage extends HTMLElement {
     const safeId = escapeHtml(id);
     this.innerHTML = `
       <ab-page-header heading="Item #${safeId}"></ab-page-header>
-      <p>Details for item <mark>${safeId}</mark> — extracted from the URL.</p>
-      <p><a href="/">← Back home</a></p>`;
+      <p>Details for item <mark data-testid="item-id">${safeId}</mark> — extracted from the URL.</p>
+      <nav aria-label="Back navigation">
+        <a href="/">← Back home</a>
+      </nav>`;
   }
 }
 

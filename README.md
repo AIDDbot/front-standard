@@ -47,6 +47,48 @@ The `quality:all` script is intended for final validation or when explicitly req
 
 The application title is configured with `displayName` in `package.json` (and falls back to the package `name`).
 
+## Architecture
+
+The client (`src/app`) has three layers. Dependencies only point downwards; `bun run lint` enforces it.
+
+```txt
+src/app/
+  app.ts          -> bootstraps router and nav menu
+  router/         -> one folder per page; depends on shared and core
+  shared/         -> code used by two or more pages; depends on core
+  core/           -> domain-free infrastructure (router, store, logger, escaping)
+```
+
+### Page folders
+
+Each route lives in its own kebab-case folder under `src/app/router`, lazily loaded from `routes.ts`:
+
+```txt
+src/app/router/login/
+  login.page.ts               -> container: presentation plus data access, the route entry point
+  login.types.ts              -> types owned by this page
+  login.repository.ts         -> page-specific data access: http, localStorage or a store (optional)
+  login-form.component.ts     -> presentational, non-reusable component (optional)
+```
+
+- Only the `*.page.ts` talks to repositories and stores. Presentational components receive data through attributes or properties and report back with `CustomEvent`s.
+- Pages never import from other pages. Code starts inside its page and moves to `shared/` once a second page needs it (e.g. `shared/repositories/auth.repository.ts` serves login and register).
+- Only create the optional files a page actually needs.
+- Prefix local tag names with the page name (`ab-login-form`); the custom elements registry is global.
+
+## Testing
+
+Unit tests (`bun test`) are kept to the minimum: utilities in `core/` and `shared/`, and any genuinely complex logic. Presentation is covered by end-to-end tests, and repositories are not unit tested, since they are thin API calls.
+
+## Semantic and accessible HTML
+
+Markup must be semantic and accessible, and easy to target from e2e tests:
+
+- Use landmarks and native elements (`header`, `nav`, `main`, `section`, `form`, `button`) with real headings; label sections with `aria-labelledby` and forms or navs with `aria-label`.
+- Every input has a `<label for>`; buttons have visible text or an `aria-label`.
+- Announce async results with `role="status"` (plus `aria-busy` while loading) and errors with `role="alert"`; mark the active link with `aria-current="page"`.
+- E2E tests select by role and accessible name first (`getByRole`, `getByLabel`); add a `data-testid` only for elements without one (status text, values).
+
 ## Rendering untrusted values
 
 Prefer DOM APIs such as `textContent` for dynamic content. When a value must be interpolated into an `innerHTML` template, escape it first with `escapeHtml` from `src/app/core/escape-html.ts`. Escaping HTML does not validate URLs; validate untrusted links separately before using them in `href` or `src` attributes.

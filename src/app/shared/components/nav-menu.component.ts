@@ -1,5 +1,5 @@
 import { escapeHtml } from "../../core/escape-html.js";
-import { menuLinks } from "../../router/routes.js";
+import type { MenuLink } from "../../core/create-router.js";
 import { appTitle } from "../global.js";
 import { authStore } from "../store/auth.store.js";
 
@@ -15,8 +15,29 @@ const getInitialTheme = (): "light" | "dark" => {
 
 document.documentElement.dataset["theme"] = getInitialTheme();
 
-/** App nav bar. Override the title with the `title` attribute or change `displayName` in package.json. */
+/**
+ * App nav bar: <ab-nav-menu current-path="/about">, with `links` set as a property.
+ * Override the title with the `title` attribute or change `displayName` in package.json.
+ */
 class NavMenu extends HTMLElement {
+  public static readonly observedAttributes = ["current-path"];
+
+  #links: readonly MenuLink[] = [];
+
+  public set links(value: readonly MenuLink[]) {
+    this.#links = value;
+    this.#render();
+  }
+
+  public attributeChangedCallback(): void {
+    this.#render();
+  }
+
+  #linkItem({ href, label }: Readonly<MenuLink>): string {
+    const current = this.getAttribute("current-path") === href ? ' aria-current="page"' : "";
+    return `<li><a href="${escapeHtml(href)}"${current}>${escapeHtml(label)}</a></li>`;
+  }
+
   #setupThemeToggle(): void {
     const toggle = this.querySelector<HTMLButtonElement>("#theme-toggle");
     if (!toggle) return;
@@ -34,21 +55,16 @@ class NavMenu extends HTMLElement {
   }
 
   #renderMenuItems(): string {
-    return (menuLinks as readonly { href: string; label: string }[])
-      .map(
-        ({ href, label }: Readonly<{ href: string; label: string }>) =>
-          `<li><a href="${escapeHtml(href)}">${escapeHtml(label)}</a></li>`,
-      )
-      .join("\n            ");
+    return this.#links.map((link) => this.#linkItem(link)).join("\n            ");
   }
 
   #renderAuthLinks(): string {
     const session = authStore.get();
     if (session) {
-      return `<li>${escapeHtml(session.user.name)} (${escapeHtml(session.user.role)})</li>`;
+      return `<li data-testid="current-user">${escapeHtml(session.user.name)} (${escapeHtml(session.user.role)})</li>`;
     }
-    return `<li><a href="/register">Register</a></li>
-            <li><a href="/login">Login</a></li>`;
+    return `${this.#linkItem({ href: "/register", label: "Register" })}
+            ${this.#linkItem({ href: "/login", label: "Login" })}`;
   }
 
   #render(): void {
@@ -57,7 +73,7 @@ class NavMenu extends HTMLElement {
     const authLinks = this.#renderAuthLinks();
     this.innerHTML = `
       <header class="container">
-        <nav>
+        <nav aria-label="Main">
           <ul>
             <li><a href="/"><strong class="logo color">${escapeHtml(title)}</strong></a></li>
           </ul>
@@ -66,8 +82,8 @@ class NavMenu extends HTMLElement {
             ${authLinks}
             <li>
               <button id="theme-toggle" type="button" aria-label="Toggle theme">
-                <span class="light">☼</span>
-                <span class="dark">☽</span>
+                <span class="light" aria-hidden="true">☼</span>
+                <span class="dark" aria-hidden="true">☽</span>
               </button>
             </li>
           </ul>
@@ -85,3 +101,9 @@ class NavMenu extends HTMLElement {
 }
 
 customElements.define(tagName, NavMenu);
+
+declare global {
+  interface HTMLElementTagNameMap {
+    [tagName]: NavMenu;
+  }
+}
