@@ -2,7 +2,9 @@
   "name": "front-standard",
   "displayName": "AIDDbot Archetypes",
   "version": "0.2.0",
-  "codename": "oktoberfest",
+  "config": {
+    "codename": "oktoberfest"
+  },
   "description": "Standard web client — framework-free HTML/CSS/TS.",
   "author": "Alberto Basalo from aicode.academy",
   "type": "module",
