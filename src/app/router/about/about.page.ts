@@ -21,6 +21,11 @@ const renderAuthor = (author: Readonly<AppAuthor> | null): string => {
 
 class AboutPage extends HTMLElement {
   public connectedCallback(): void {
+    this.#render();
+    this.#load();
+  }
+
+  #render(): void {
     this.innerHTML = `
       <ab-page-header heading="About" subtitle="Just a demo built on web standards only."></ab-page-header>
       <p>Routing via the Navigation API, components as custom elements loaded on demand.</p>
@@ -30,6 +35,9 @@ class AboutPage extends HTMLElement {
         <p role="status" aria-live="polite" aria-busy="true" data-testid="health-status">Loading health…</p>
       </section>`;
 
+  }
+
+  #load(): void {
     const cached = healthStore.get();
     if (cached) {
       this.#renderHealth(cached);

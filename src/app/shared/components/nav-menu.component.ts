@@ -24,6 +24,10 @@ class NavMenu extends HTMLElement {
 
   #links: readonly MenuLink[] = [];
 
+  public get links(): readonly MenuLink[] {
+    return this.#links;
+  }
+
   public set links(value: readonly MenuLink[]) {
     this.#links = value;
     this.#render();

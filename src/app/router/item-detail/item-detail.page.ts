@@ -5,6 +5,10 @@ export const tagName = "ab-item-detail-page";
 
 class ItemDetailPage extends HTMLElement {
   public connectedCallback(): void {
+    this.#render();
+  }
+
+  #render(): void {
     const id = this.getAttribute("item-id") ?? "unknown";
     const safeId = escapeHtml(id);
     this.innerHTML = `

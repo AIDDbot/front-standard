@@ -2,11 +2,24 @@
   "name": "front-standard",
   "displayName": "AIDDbot Archetypes",
   "version": "0.2.0",
-  "config": {
-    "codename": "oktoberfest"
-  },
   "description": "Standard web client — framework-free HTML/CSS/TS.",
-  "author": "Alberto Basalo from aicode.academy",
+  "keywords": [
+    "archetype",
+    "frontend",
+    "html",
+    "starter",
+    "vanilla"
+  ],
+  "homepage": "https://aiddbot.com",
+  "license": "MIT",
+  "author": {
+    "name": "Alberto Basalo",
+    "email": "albertobasalo@aicode.academy",
+    "url": "https://aicode.academy"
+  },
+  "repository": {
+    "url": "https://github.com/AIDDbot/front-standard"
+  },
   "type": "module",
   "scripts": {
     "dev": "bun --watch src/server/main.ts",
@@ -33,6 +46,9 @@
     "oxlint": "^1.85.0",
     "oxlint-tsgolint": "^7.0.2002",
     "typescript": "^7.0.2"
+  },
+  "config": {
+    "codename": "oktoberfest"
   },
   "engines": {
     "bun": ">=1.4.0",

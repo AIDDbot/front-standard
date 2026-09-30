@@ -5,6 +5,10 @@ export const tagName = "ab-not-found-page";
 
 class NotFoundPage extends HTMLElement {
   public connectedCallback(): void {
+    this.#render();
+  }
+
+  #render(): void {
     this.innerHTML = `
       <ab-page-header heading="Page not found"></ab-page-header>
       <p>The route <code data-testid="missing-path">${escapeHtml(location.pathname)}</code> does not match any page.</p>

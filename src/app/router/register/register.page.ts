@@ -7,6 +7,11 @@ export const tagName = "ab-register-page";
 
 class RegisterPage extends HTMLElement {
   public connectedCallback(): void {
+    this.#render();
+    this.#bind();
+  }
+
+  #render(): void {
     this.innerHTML = `
       <ab-page-header heading="Register" subtitle="Create your account."></ab-page-header>
       <form aria-label="Register">
@@ -26,6 +31,9 @@ class RegisterPage extends HTMLElement {
       </form>
       <p role="alert" data-testid="register-error"></p>`;
 
+  }
+
+  #bind(): void {
     this.querySelector("form")?.addEventListener("submit", (event: Readonly<Event>) => {
       event.preventDefault();
       this.#submit();

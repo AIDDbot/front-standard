@@ -14,6 +14,10 @@ const demoItems: readonly DemoItem[] = [
 
 class HomePage extends HTMLElement {
   public connectedCallback(): void {
+    this.#render();
+  }
+
+  #render(): void {
     const itemLinks = demoItems
       .map(
         ({ id, name }: Readonly<DemoItem>) =>
