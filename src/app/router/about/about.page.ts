@@ -34,7 +34,6 @@ class AboutPage extends HTMLElement {
         <h2 id="health-heading">Server health</h2>
         <p role="status" aria-live="polite" aria-busy="true" data-testid="health-status">Loading health…</p>
       </section>`;
-
   }
 
   #load(): void {

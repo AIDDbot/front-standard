@@ -30,7 +30,6 @@ class RegisterPage extends HTMLElement {
         <button type="submit">Register</button>
       </form>
       <p role="alert" data-testid="register-error"></p>`;
-
   }
 
   #bind(): void {

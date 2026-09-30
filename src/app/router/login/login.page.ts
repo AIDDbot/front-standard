@@ -28,7 +28,6 @@ class LoginPage extends HTMLElement {
       ${registered ? `<p role="status" data-testid="register-confirmation">Registration successful. Please log in.</p>` : ""}
       <ab-login-form></ab-login-form>
       <p role="alert" data-testid="login-error"></p>`;
-
   }
 
   #bind(): void {
