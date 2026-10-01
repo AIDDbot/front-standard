@@ -22,24 +22,23 @@
   },
   "type": "module",
   "scripts": {
-    "dev": "bun --watch src/server/main.ts",
-    "start": "bun src/server/main.ts",
-    "test": "bun test",
-    "test:watch": "bun test --watch",
+    "dev": "node --watch src/server/main.ts",
+    "start": "node src/server/main.ts",
+    "test": "node --import ./test-setup.ts --test \"src/**/*.test.ts\"",
+    "test:watch": "node --watch --import ./test-setup.ts --test \"src/**/*.test.ts\"",
     "lint": "oxlint --format=agent --quiet",
     "lint:fix": "oxlint --fix --format=agent --quiet",
     "format": "oxfmt --write",
-    "fix": "bun run lint:fix && bun run format",
+    "fix": "node --run lint:fix && node --run format",
     "quality:warnings": "oxlint --deny-warnings --format=agent",
     "quality:complexity": "oxlint -c .oxlintrc.complexity.json --format=agent --quiet",
-    "quality:coverage": "bun test --coverage",
-    "quality:all": "bun run quality:warnings && bun run quality:complexity && bun run quality:coverage"
+    "quality:coverage": "node --input-type=module -e \"import { mkdirSync } from 'node:fs'; mkdirSync('coverage', { recursive: true });\" && node --import ./test-setup.ts --test --experimental-test-coverage --test-coverage-lines=80 --test-coverage-functions=80 --test-coverage-exclude=\"**/*.test.ts\" --test-coverage-exclude=\"**/*.config.*\" --test-coverage-exclude=\"**/generated/**\" --test-reporter=spec --test-reporter-destination=stdout --test-reporter=lcov --test-reporter-destination=coverage/lcov.info \"src/**/*.test.ts\"",
+    "quality:all": "node --run quality:warnings && node --run quality:complexity && node --run quality:coverage"
   },
   "dependencies": {
     "express": "^5.2.1"
   },
   "devDependencies": {
-    "@types/bun": "^1.4.2",
     "@types/express": "^5.0.6",
     "@types/node": "^26.6.2",
     "oxfmt": "^0.68.0",
@@ -51,8 +50,7 @@
     "codename": "oktoberfest"
   },
   "engines": {
-    "bun": ">=1.4.0",
-    "node": ">=26.0.0"
+    "node": ">=26.10.0"
   },
-  "packageManager": "bun@1.4.0"
+  "packageManager": "npm@12.0.0"
 }
