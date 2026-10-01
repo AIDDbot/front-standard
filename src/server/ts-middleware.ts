@@ -1,26 +1,15 @@
 import type { NextFunction, Request, Response } from "express";
 import { existsSync, readFileSync, statSync } from "node:fs";
-import * as nodeModule from "node:module";
+import { stripTypeScriptTypes } from "node:module";
 import path from "node:path";
 import { clientSrc, isDev, setNoCache } from "./config.ts";
 
 const cache = new Map<string, { mtimeMs: number; js: string }>();
-const { stripTypeScriptTypes } = nodeModule as {
-  stripTypeScriptTypes?: (code: string, options: { mode: "strip" }) => string;
-};
+if (typeof stripTypeScriptTypes !== "function") {
+  throw new TypeError("Node.js >=26.10.0 with module.stripTypeScriptTypes is required.");
+}
 
-const transpileTsToJs = (code: string): string => {
-  // Bun does not expose node:module.stripTypeScriptTypes; use its native TS transpiler.
-  if (typeof Bun !== "undefined" && typeof Bun.Transpiler === "function") {
-    return new Bun.Transpiler({ loader: "ts" }).transformSync(code);
-  }
-
-  if (typeof stripTypeScriptTypes === "function") {
-    return stripTypeScriptTypes(code, { mode: "strip" });
-  }
-
-  throw new Error("No TypeScript transpiler available for runtime.");
-};
+const transpileTsToJs = (code: string): string => stripTypeScriptTypes(code, { mode: "strip" });
 
 function getTranspiledJavaScript(tsPath: string): string {
   const js = transpileTsToJs(readFileSync(tsPath, "utf8"));
@@ -43,13 +32,17 @@ function getCachedOrTranspile(tsPath: string, mtimeMs: number): string {
 }
 
 export const serveTsAsJs = (req: Request, res: Response, next: NextFunction): void => {
-  if (!req.path.endsWith(".js")) {
+  if (!req.path.endsWith(".ts")) {
     next();
     return;
   }
 
-  const tsPath = path.join(clientSrc, req.path.replace(/\.js$/u, ".ts"));
-  if (!existsSync(tsPath)) {
+  const tsPath = path.resolve(clientSrc, `.${req.path}`);
+  if (
+    !tsPath.startsWith(`${path.resolve(clientSrc)}${path.sep}`) ||
+    !existsSync(tsPath) ||
+    !statSync(tsPath).isFile()
+  ) {
     next();
     return;
   }
