@@ -8,7 +8,7 @@ export const tagName = "ab-home-page";
 const demoItems: readonly DemoItem[] = [
   { id: "1", name: "A web app with no more than standards" },
   { id: "2", name: "A backend API based on Express" },
-  { id: "3", name: "A bun/node CLI" },
+  { id: "3", name: "A Node.js CLI" },
   { id: "4", name: "End to end tested with Playwright" },
 ];
 

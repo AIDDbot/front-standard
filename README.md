@@ -4,38 +4,24 @@ Archetype with boilerplate code for a front web app with standard HTML, CSS and 
 
 ## Quick start
 
-> [!IMPORTANT]
-> this projects uses `bun` as a package manager and runner.
-
-1. Install bun: the fastest tooling manager for Node.js projects.
+Install Node.js 26.10+ with npm 12.0.0 (included with Node 26.10.0). The pinned version is in `.node-version`.
 
 ```bash
-# Install Bun
-# (Windows PowerShell)
-powershell -c "irm bun.com/install.ps1 | iex"
-# (macOS/Linux)
-curl -fsSL https://bun.com/install | bash -s
-# Verify installation
-bun --version
-# Upgrade Bun to the latest stable version
-bun upgrade --stable
-```
-
-2. Install dependencies and run the tests
-
-```bash
-bun install
-bun start   # runs the server in production mode
-bun test    # runs the unit tests
-bun dev     # runs in watch mode for development
-bun lint    # runs the linter
+node --version
+npm --version
+npm ci
+npm start       # production, http://localhost:4000
+npm test
+npm run dev
+npm run test:watch
+npm run lint
 ```
 
 During regular development, run only the unit tests and basic lint checks:
 
 ```bash
-bun test
-bun run lint
+npm test
+npm run lint
 ```
 
 The `quality:all` script is intended for final validation or when explicitly requested; it does not need to be run after every development change.
@@ -49,7 +35,7 @@ The application title is configured with `displayName` in `package.json` (and fa
 
 ## Architecture
 
-The client (`src/app`) has three layers. Dependencies only point downwards; `bun run lint` enforces it.
+The client (`src/app`) has three layers. Dependencies only point downwards; `npm run lint` enforces it.
 
 ```txt
 src/app/
@@ -78,7 +64,21 @@ src/app/router/login/
 
 ## Testing
 
-Unit tests (`bun test`) are kept to the minimum: utilities in `core/` and `shared/`, and any genuinely complex logic. Presentation is covered by end-to-end tests, and repositories are not unit tested, since they are thin API calls.
+Tests use the native Node test runner with `--import ./test-setup.ts` and the quoted `src/**/*.test.ts` glob. `npm run quality:coverage` produces text and `coverage/lcov.info` reports, enforcing 80% minimum lines and functions. Test files, configuration files and generated folders are excluded. Coverage measures loaded code, including middleware subprocesses.
+
+### Node 26.x stability
+
+Native [TypeScript type-stripping](https://nodejs.org/docs/latest-v26.x/api/typescript.html#type-stripping) and [server watch mode](https://nodejs.org/docs/latest-v26.x/api/cli.html#--watch) are stable. The server executes erasable TypeScript directly. Node does not type-check or read tsconfig; Oxlint performs type checking. Use `.ts` for all relative TypeScript imports, including lazy browser imports.
+
+[`module.stripTypeScriptTypes`](https://nodejs.org/docs/latest-v26.x/api/module.html#modulestriptypescripttypescode-options) remains stability 1.2 (Release candidate) and emits an experimental warning. Its strip mode serves browser `.ts` requests as `text/javascript`. Production caches by file mtime; development sends `Cache-Control: no-store` and strips each request. HTML loads `/app.ts`; legacy `.js` aliases are not served.
+
+Native [test coverage](https://nodejs.org/docs/latest-v26.x/api/test.html#collecting-code-coverage), coverage threshold/exclusion flags, and [test watch mode](https://nodejs.org/docs/latest-v26.x/api/test.html#watch-mode) remain experimental. These statuses were checked against Node 26.x documentation and `node --help` using Node 26.10.0.
+
+### Migration baseline
+
+Before migration: 48 tests passed, loaded-code coverage was 100% in lines and functions, and production startup served `/app.js` on port 4000 with `text/javascript`. After migration: 50 tests passed, with 95.93% lines and 96.88% functions, including server configuration and middleware tests.
+
+Unit tests (`npm test`) are kept to the minimum: utilities in `core/` and `shared/`, and any genuinely complex logic. Presentation is covered by end-to-end tests, and repositories are not unit tested, since they are thin API calls.
 
 ## Semantic and accessible HTML
 
@@ -105,7 +105,7 @@ Prefer DOM APIs such as `textContent` for dynamic content. When a value must be 
 - **Browser**: `createLogger(source)` from `src/app/core/create-logger.ts` writes to the browser console with the same line format. Extra arguments are passed through so objects stay inspectable:
 
 ```ts
-import { createLogger } from "../core/create-logger.js";
+import { createLogger } from "../core/create-logger.ts";
 
 const logger = createLogger("home");
 logger.info("Items loaded", items);
@@ -117,7 +117,6 @@ The default level is `info`. To see `debug` traces, run `localStorage.logLevel =
 
 - [TypeScript7](https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/) : typed superset of JavaScript that compiles to plain JavaScript.
 - [Node26](https://nodejs.org/es/blog/release/v26.0.0/) : JavaScript runtime built on Chrome's V8 JavaScript engine.
-- [Bun 1.4.0](https://bun.com/docs/installation) : JavaScript runtime and package manager used by this project.
 - [Oxlint](https://oxc.rs/docs/guide/usage/linter) : high-performance linter for TypeScript
 
 ---
