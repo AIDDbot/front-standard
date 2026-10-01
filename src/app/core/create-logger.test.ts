@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { afterEach, beforeEach, describe, test } from "node:test";
-import { LOG_LEVEL_KEY, createLogger, formatLogPrefix, parseLogLevel } from "./create-logger.js";
+import { LOG_LEVEL_KEY, createLogger, formatLogPrefix, parseLogLevel } from "./create-logger.ts";
 
 const DATE = new Date(2026, 0, 5, 9, 4, 7, 81);
 

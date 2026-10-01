@@ -1,4 +1,4 @@
-import { type LoginFormFields, loginSubmitEvent } from "./login.types.js";
+import { type LoginFormFields, loginSubmitEvent } from "./login.types.ts";
 
 export const tagName = "ab-login-form";
 

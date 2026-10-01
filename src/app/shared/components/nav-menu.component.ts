@@ -1,7 +1,7 @@
-import { escapeHtml } from "../../core/escape-html.js";
-import type { MenuLink } from "../../core/create-router.js";
-import { appTitle } from "../global.js";
-import { authStore } from "../store/auth.store.js";
+import { escapeHtml } from "../../core/escape-html.ts";
+import type { MenuLink } from "../../core/create-router.ts";
+import { appTitle } from "../global.ts";
+import { authStore } from "../store/auth.store.ts";
 
 export const tagName = "ab-nav-menu";
 

@@ -1,11 +1,11 @@
 import express from "express";
-import { clientSrc, port, staticOptions } from "./config.js";
-import { logHttpRequests } from "./http-logger.js";
-import { serveIndexHtml } from "./indexHtml.js";
-import { listen } from "./listener.js";
-import { createLogger } from "./logger.js";
-import { handleSplatRoute } from "./splat-route.js";
-import { serveTsAsJs } from "./ts-middleware.js";
+import { clientSrc, port, staticOptions } from "./config.ts";
+import { logHttpRequests } from "./http-logger.ts";
+import { serveIndexHtml } from "./indexHtml.ts";
+import { listen } from "./listener.ts";
+import { createLogger } from "./logger.ts";
+import { handleSplatRoute } from "./splat-route.ts";
+import { serveTsAsJs } from "./ts-middleware.ts";
 
 const app = express();
 app.use(logHttpRequests(createLogger("http")));

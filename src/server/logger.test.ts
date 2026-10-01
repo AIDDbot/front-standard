@@ -3,7 +3,7 @@ import { existsSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { afterEach, beforeEach, describe, test } from "node:test";
-import { createLogger, formatLogDate, formatLogLine, parseLogLevel } from "./logger.js";
+import { createLogger, formatLogDate, formatLogLine, parseLogLevel } from "./logger.ts";
 
 const DATE = new Date(2026, 0, 5, 9, 4, 7, 81);
 const MESSAGE_COLUMN = "09:04:07.081 ERROR [errors]     ".length;

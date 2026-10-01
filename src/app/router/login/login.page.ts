@@ -1,9 +1,9 @@
-import "../../shared/components/page-header.component.js";
-import { goTo } from "../../shared/navigate.js";
-import { login } from "../../shared/repositories/auth.repository.js";
-import { authStore } from "../../shared/store/auth.store.js";
-import "./login-form.component.js";
-import { type LoginFormFields, loginSubmitEvent } from "./login.types.js";
+import "../../shared/components/page-header.component.ts";
+import { goTo } from "../../shared/navigate.ts";
+import { login } from "../../shared/repositories/auth.repository.ts";
+import { authStore } from "../../shared/store/auth.store.ts";
+import "./login-form.component.ts";
+import { type LoginFormFields, loginSubmitEvent } from "./login.types.ts";
 
 export const tagName = "ab-login-page";
 

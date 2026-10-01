@@ -1,5 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
-import type { Logger } from "./logger.js";
+import type { Logger } from "./logger.ts";
 
 const HTTP_CLIENT_ERROR = 400;
 const HTTP_SERVER_ERROR = 500;

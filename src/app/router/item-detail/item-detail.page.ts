@@ -1,5 +1,5 @@
-import { escapeHtml } from "../../core/escape-html.js";
-import "../../shared/components/page-header.component.js";
+import { escapeHtml } from "../../core/escape-html.ts";
+import "../../shared/components/page-header.component.ts";
 
 export const tagName = "ab-item-detail-page";
 

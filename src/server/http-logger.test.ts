@@ -2,8 +2,8 @@ import express from "express";
 import assert from "node:assert/strict";
 import type { AddressInfo } from "node:net";
 import { test } from "node:test";
-import { logHttpRequests } from "./http-logger.js";
-import type { Logger, LogLevel } from "./logger.js";
+import { logHttpRequests } from "./http-logger.ts";
+import type { Logger, LogLevel } from "./logger.ts";
 
 interface LoggedLine {
   level: LogLevel;

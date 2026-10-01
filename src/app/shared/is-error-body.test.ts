@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, test } from "node:test";
-import { isErrorBody } from "./is-error-body.js";
+import { isErrorBody } from "./is-error-body.ts";
 
 void describe("isErrorBody", () => {
   void test("accepts a body with a string error field", () => {

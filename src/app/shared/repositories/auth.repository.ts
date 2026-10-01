@@ -1,4 +1,4 @@
-import { post } from "../http-client.js";
+import { post } from "../http-client.ts";
 
 export type UserRole = "user";
 

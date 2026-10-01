@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { afterEach, describe, test } from "node:test";
-import { goTo } from "./navigate.js";
+import { goTo } from "./navigate.ts";
 
 interface GlobalWithBrowserApis {
   navigation?: { navigate: (path: string) => void };

@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { afterEach, beforeEach, test } from "node:test";
-import { createStore } from "./create-store.js";
+import { createStore } from "./create-store.ts";
 
 // Named constants for test values
 const INITIAL_COUNT = 0;

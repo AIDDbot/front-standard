@@ -1,7 +1,7 @@
 import type { Request, Response } from "express";
 import { readFileSync } from "node:fs";
 import path from "node:path";
-import { apiBaseUrl, appAuthor, appTitle, clientSrc, isDev, setNoCache } from "./config.js";
+import { apiBaseUrl, appAuthor, appTitle, clientSrc, isDev, setNoCache } from "./config.ts";
 
 const indexPath = path.join(clientSrc, "index.html");
 const serialize = (value: unknown): string =>

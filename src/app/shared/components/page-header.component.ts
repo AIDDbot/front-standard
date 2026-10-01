@@ -14,4 +14,4 @@ class PageHeader extends HTMLElement {
 }
 
 customElements.define(tagName, PageHeader);
-import { escapeHtml } from "../../core/escape-html.js";
+import { escapeHtml } from "../../core/escape-html.ts";

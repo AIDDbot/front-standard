@@ -1,8 +1,8 @@
-import { createLogger } from "./core/create-logger.js";
-import { createRouter } from "./core/create-router.js";
-import { menuLinks, notFoundRoute, routes } from "./router/routes.js";
-import "./shared/components/nav-menu.component.js";
-import { lastRouteStore } from "./shared/store/last-route.store.js";
+import { createLogger } from "./core/create-logger.ts";
+import { createRouter } from "./core/create-router.ts";
+import { menuLinks, notFoundRoute, routes } from "./router/routes.ts";
+import "./shared/components/nav-menu.component.ts";
+import { lastRouteStore } from "./shared/store/last-route.store.ts";
 
 const logger = createLogger("router");
 const outlet = document.querySelector<HTMLElement>("#outlet");

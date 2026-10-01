@@ -30,8 +30,8 @@ globalThis.localStorage = {
 globalThis.API_BASE_URL = API;
 
 // Imported after the stubs because the auth store reads localStorage on load.
-const { ApiError, del, get, isApiError, patch, post, put } = await import("./http-client.js");
-const { authStore } = await import("./store/auth.store.js");
+const { ApiError, del, get, isApiError, patch, post, put } = await import("./http-client.ts");
+const { authStore } = await import("./store/auth.store.ts");
 
 let captured: CapturedRequest[] = [];
 

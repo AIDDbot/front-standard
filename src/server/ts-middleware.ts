@@ -2,7 +2,7 @@ import type { NextFunction, Request, Response } from "express";
 import { existsSync, readFileSync, statSync } from "node:fs";
 import * as nodeModule from "node:module";
 import path from "node:path";
-import { clientSrc, isDev, setNoCache } from "./config.js";
+import { clientSrc, isDev, setNoCache } from "./config.ts";
 
 const cache = new Map<string, { mtimeMs: number; js: string }>();
 const { stripTypeScriptTypes } = nodeModule as {

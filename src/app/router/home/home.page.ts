@@ -1,7 +1,7 @@
-import { escapeHtml } from "../../core/escape-html.js";
-import "../../shared/components/page-header.component.js";
-import { appTitle } from "../../shared/global.js";
-import type { DemoItem } from "./home.types.js";
+import { escapeHtml } from "../../core/escape-html.ts";
+import "../../shared/components/page-header.component.ts";
+import { appTitle } from "../../shared/global.ts";
+import type { DemoItem } from "./home.types.ts";
 
 export const tagName = "ab-home-page";
 

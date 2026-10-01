@@ -1,7 +1,7 @@
-import "../../shared/components/page-header.component.js";
-import { goTo } from "../../shared/navigate.js";
-import { register } from "../../shared/repositories/auth.repository.js";
-import type { RegisterFormFields } from "./register.types.js";
+import "../../shared/components/page-header.component.ts";
+import { goTo } from "../../shared/navigate.ts";
+import { register } from "../../shared/repositories/auth.repository.ts";
+import type { RegisterFormFields } from "./register.types.ts";
 
 export const tagName = "ab-register-page";
 

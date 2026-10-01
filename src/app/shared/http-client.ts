@@ -1,6 +1,6 @@
-import { createLogger } from "../core/create-logger.js";
-import { isErrorBody } from "./is-error-body.js";
-import { authStore } from "./store/auth.store.js";
+import { createLogger } from "../core/create-logger.ts";
+import { isErrorBody } from "./is-error-body.ts";
+import { authStore } from "./store/auth.store.ts";
 
 declare global {
   var API_BASE_URL: string;

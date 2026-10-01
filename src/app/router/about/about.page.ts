@@ -1,9 +1,9 @@
-import { escapeHtml } from "../../core/escape-html.js";
-import "../../shared/components/page-header.component.js";
-import { type AppAuthor, appAuthor } from "../../shared/global.js";
-import type { HealthStatus } from "./about.types.js";
-import { getHealth } from "./health.repository.js";
-import { healthStore } from "./health.store.js";
+import { escapeHtml } from "../../core/escape-html.ts";
+import "../../shared/components/page-header.component.ts";
+import { type AppAuthor, appAuthor } from "../../shared/global.ts";
+import type { HealthStatus } from "./about.types.ts";
+import { getHealth } from "./health.repository.ts";
+import { healthStore } from "./health.store.ts";
 
 export const tagName = "ab-about-page";
 
