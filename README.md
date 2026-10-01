@@ -64,7 +64,7 @@ src/app/router/login/
 
 ## Testing
 
-Tests use the native Node test runner with `--import ./test-setup.ts` and the quoted `src/**/*.test.ts` glob. `npm run quality:coverage` produces text and `coverage/lcov.info` reports, enforcing 80% minimum lines and functions. Test files, configuration files and generated folders are excluded. Coverage measures loaded code, including middleware subprocesses.
+Tests use the native Node test runner with `--import ./test-setup.ts` and the quoted `src/**/*.test.ts` glob. Coverage options live in `coverage.config.json`, loaded with the experimental `--experimental-config-file` flag. Keep `coverage/.gitkeep` so the lcov destination directory exists before Node loads test preloads. `npm run quality:coverage` produces text and `coverage/lcov.info` reports, enforcing 80% minimum lines and functions. Test files, configuration files and generated folders are excluded. Coverage measures loaded code, including middleware subprocesses.
 
 ### Node 26.x stability
 

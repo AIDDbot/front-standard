@@ -1,0 +1,14 @@
+{
+  "$schema": "https://nodejs.org/dist/latest-v26.x/docs/node-config-schema.json",
+  "nodeOptions": {
+    "import": ["./test-setup.ts"]
+  },
+  "test": {
+    "experimental-test-coverage": true,
+    "test-coverage-lines": 80,
+    "test-coverage-functions": 80,
+    "test-coverage-exclude": ["**/*.test.ts", "**/*.config.*", "**/generated/**"],
+    "test-reporter": ["spec", "lcov"],
+    "test-reporter-destination": ["stdout", "coverage/lcov.info"]
+  }
+}
