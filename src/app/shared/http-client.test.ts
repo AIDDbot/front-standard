@@ -15,7 +15,7 @@ interface CapturedRequest {
   init: RequestInit;
 }
 
-// Bun has no localStorage and the auth store is persisted. URLSearchParams is the same
+// Use deterministic in-memory storage for the persisted auth store. URLSearchParams is a
 // string map and already answers `null` for a missing key, like Storage does.
 const storage = new URLSearchParams();
 globalThis.localStorage = {
@@ -37,13 +37,10 @@ let captured: CapturedRequest[] = [];
 
 /** Replaces fetch with one that records the request and answers with `response`. */
 function respondWith(response: Response): void {
-  globalThis.fetch = Object.assign(
-    (input: string | URL | Request, init: RequestInit = {}) => {
-      captured.push({ init, url: input instanceof Request ? input.url : input.toString() });
-      return Promise.resolve(response);
-    },
-    { preconnect: globalThis.fetch.preconnect },
-  );
+  globalThis.fetch = (input: string | URL | Request, init: RequestInit = {}) => {
+    captured.push({ init, url: input instanceof Request ? input.url : input.toString() });
+    return Promise.resolve(response);
+  };
 }
 
 const jsonResponse = (body: unknown, status = STATUS_OK): Response =>
